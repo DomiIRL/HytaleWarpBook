@@ -1,0 +1,27 @@
+$C = "Common.ui";
+
+Group #WarpPage {
+  Anchor: (Height: 60, Horizontal: 1);
+  Padding: (Full: 10);
+
+  Group #Info {
+    LayoutMode: Top;
+    Padding: (Right: 10);
+    Anchor: (Horizontal: 1);
+
+    Label #Name {
+      Style: (FontSize: 16, TextColor: #ffffff);
+      Anchor: (Height: 20);
+    }
+
+    Label #Position {
+      Style: (FontSize: 12, TextColor: #aaaaaa);
+      Anchor: (Height: 20);
+    }
+  }
+
+  $C.@TextButton #TeleportButton {
+    @Text = %server.customUI.warpBook.teleport;
+    Anchor: (Width: 150, Height: 40, Right: 5, Vertical: 1);
+  }
+}

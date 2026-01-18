@@ -1,0 +1,108 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '9.3.1'
+}
+
+group = 'dev.svrt.dominik'
+version = '1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Local HytaleServer dependency
+    compileOnly files('libs/HytaleServer.jar')
+}
+
+// Configure the JAR task
+jar {
+    archiveFileName = "${project.name}-${project.version}.jar"
+}
+
+// Configure Shadow JAR to create a single JAR with resources
+shadowJar {
+    archiveFileName = "${project.name}-${project.version}.jar"
+    archiveClassifier = ''
+    
+    // Exclude the HytaleServer from being bundled
+    dependencies {
+        exclude(dependency(files('libs/HytaleServer.jar')))
+    }
+}
+
+// Make build task use shadowJar
+build.dependsOn shadowJar
+
+// Task to run the Hytale server
+tasks.register('runServer', Exec) {
+    description = 'Builds plugin, deploys to Server/mods and starts the Hytale server'
+    group = 'application'
+    
+    dependsOn build
+
+    workingDir = file('Server')
+    commandLine 'java', '-jar', '../libs/HytaleServer.jar', '--assets', '../libs/Assets.zip'
+
+    // Enable interactive console
+    standardInput = System.in
+    standardOutput = System.out
+    errorOutput = System.err
+
+    doFirst {
+        // Ensure Server/mods directory exists
+        def modsDir = file('Server/mods')
+        modsDir.mkdirs()
+
+        // Copy the built JAR to Server/mods
+        def sourceJar = file("build/libs/${project.name}-${project.version}.jar")
+        if (sourceJar.exists()) {
+            copy {
+                from sourceJar
+                into modsDir
+            }
+            println "Copied ${sourceJar.name} to ${modsDir.absolutePath}"
+        } else {
+            println "Warning: Built JAR not found at ${sourceJar}"
+        }
+        
+        println "Starting Hytale Server..."
+        println "Working directory: ${workingDir.absolutePath}"
+        println "Command: java -jar ../libs/HytaleServer.jar --assets ../libs/Assets.zip"
+    }
+}
+
+// Task to just deploy the plugin without running the server
+tasks.register('deployPlugin') {
+    description = 'Copies the built plugin JAR to Server/mods folder'
+    group = 'deployment'
+    
+    dependsOn build
+
+    doLast {
+        def modsDir = file('Server/mods')
+        modsDir.mkdirs()
+
+        def sourceJar = file("build/libs/${project.name}-${project.version}.jar")
+        if (sourceJar.exists()) {
+            copy {
+                from sourceJar
+                into modsDir
+            }
+            println "Plugin deployed to ${modsDir.absolutePath}"
+        } else {
+            println "Warning: Built JAR not found at ${sourceJar}"
+        }
+    }
+}
+
+
+
+
+

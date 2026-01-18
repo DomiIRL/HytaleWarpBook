@@ -1,0 +1,20 @@
+{
+  "Group": "domiirl",
+  "Name": "domiirl_warpbook",
+  "Version": "1.0.0",
+  "Description": "A Hytale version of the warpbook mod.",
+  "Authors": [
+    {
+      "Name": "DomiIRL",
+      "Email": "dominik@svrt.dev",
+      "Url": "https://dominik.svrt.dev"
+    }
+  ],
+  "Website": "https://dominik.svrt.dev",
+  "ServerVersion": "*",
+  "Dependencies": {},
+  "OptionalDependencies": {},
+  "DisabledByDefault": false,
+  "IncludesAssetPack": true,
+  "Main": "dev.svrt.dominik.warpbook.WarpBookMod"
+}
