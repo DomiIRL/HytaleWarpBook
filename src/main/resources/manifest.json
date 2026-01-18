@@ -1,8 +1,8 @@
 {
-  "Group": "domiirl",
-  "Name": "domiirl_warpbook",
+  "Group": "DomiIRL",
+  "Name": "Arcanist's Warp Book",
   "Version": "1.0.0",
-  "Description": "A Hytale version of the warpbook mod.",
+  "Description": "Traverse the void between distant places with magical warp pages",
   "Authors": [
     {
       "Name": "DomiIRL",
@@ -10,7 +10,7 @@
       "Url": "https://dominik.svrt.dev"
     }
   ],
-  "Website": "https://dominik.svrt.dev",
+  "Website": "https://www.curseforge.com/hytale/mods/arcanists-warp-book",
   "ServerVersion": "*",
   "Dependencies": {},
   "OptionalDependencies": {},
