@@ -1,0 +1,44 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Warp_Page_Bound.name",
+    "Description": "server.items.Warp_Page_Bound.description"
+  },
+  "Quality": "Uncommon",
+  "MaxStack": 1,
+  "ItemLevel": 30,
+  "PlayerAnimationsId": "Item",
+  "Model": "Items/Utility/Warp_Page/Warp_Page.blockymodel",
+  "Texture": "Items/Utility/Warp_Page/Warp_Page_Bound.png",
+  "IconProperties": {
+    "Scale": 0.76,
+    "Rotation": [
+      135,
+      135,
+      0
+    ],
+    "Translation": [
+      -1,
+      5
+    ]
+  },
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "TeleportWarpPageInteraction"
+        }
+      ]
+    }
+  },
+  "UsePlayerAnimations": false,
+  "Icon": "Icons/ItemsGenerated/Warp_Page_Bound.png",
+  "Tags": {
+    "Type": [
+      "Tool"
+    ],
+    "Family": []
+  },
+  "Categories": [
+    "Items.Tools"
+  ]
+}

@@ -11,10 +11,9 @@ public class WarpPageBinding {
     .append(new KeyedCodec<>("Name", Codec.STRING),
       (c, v) -> c.name = v, c -> c.name)
     .add()
-    .append(new KeyedCodec<>("X", Transform.CODEC),
+    .append(new KeyedCodec<>("Position", Transform.CODEC),
       (c, v) -> c.transform = v, c -> c.transform)
     .add()
-
     .append(new KeyedCodec<>("World", Codec.STRING),
       (c, v) -> c.world = v, c -> c.world)
     .add()
