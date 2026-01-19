@@ -19,6 +19,7 @@ import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import dev.svrt.dominik.warpbook.common.WarpBookInventory;
 import dev.svrt.dominik.warpbook.common.WarpPageBinding;
 import dev.svrt.dominik.warpbook.common.WarpPageInteractions;
 
@@ -36,10 +37,9 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
             this.container = null;
             return;
         }
-        this.container = ItemStackItemContainer.ensureContainer(
+        this.container = WarpBookInventory.ensureWarpBookContainer(
           itemContainer,
-            context.getHeldItemSlot(),
-            (short) 27
+            context.getHeldItemSlot()
         );
     }
 
