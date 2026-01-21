@@ -124,13 +124,13 @@ public class WarpPageTeleportation {
             playerRef,
             SoundEvent.getAssetMap().getIndex("SFX_Portal_Neutral_Open"),
             SoundCategory.SFX,
-            5, 0.7f
+            5, 1f
           );
         });
         return null;
       },
-      150,
-      TimeUnit.MILLISECONDS
+      1,
+      TimeUnit.SECONDS
     ));
 
     for (ScheduledFuture<Void> task : scheduledTasks) {

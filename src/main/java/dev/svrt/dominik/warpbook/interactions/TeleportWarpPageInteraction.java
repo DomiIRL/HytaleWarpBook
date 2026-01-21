@@ -5,6 +5,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.WaitForDataFrom;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
@@ -55,16 +56,17 @@ public class TeleportWarpPageInteraction extends SimpleInstantInteraction {
             context.getState().state = InteractionState.Failed;
             return;
         }
-
-        MovementStatesComponent movementStatesComponent = entityRef.getStore().getComponent(entityRef, MovementStatesComponent.getComponentType());
-        if (movementStatesComponent == null) {
-            context.getState().state = InteractionState.Failed;
-            return;
-        }
-        if (!movementStatesComponent.getMovementStates().onGround) {
-            context.getState().state = InteractionState.Failed;
-            return;
-        }
+//
+//        MovementStatesComponent movementStatesComponent = entityRef.getStore().getComponent(entityRef, MovementStatesComponent.getComponentType());
+//        if (movementStatesComponent == null) {
+//            context.getState().state = InteractionState.Failed;
+//            return;
+//        }
+//        if (!movementStatesComponent.getMovementStates().onGround) {
+//            player.sendMessage(Message.raw("You need to be on the ground to teleport."));
+//            context.getState().state = InteractionState.Failed;
+//            return;
+//        }
 
         boolean success = WarpPageInteractionHandler.startTeleportPlayer(entityRef, entityRef.getStore(), heldItem);
         if (success) {
