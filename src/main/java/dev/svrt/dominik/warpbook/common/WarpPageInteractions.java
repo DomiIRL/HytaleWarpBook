@@ -82,8 +82,8 @@ public class WarpPageInteractions {
       return false;
     }
     ItemStack heldItem = context.getHeldItem();
-    if (heldItem == null || !heldItem.getItemId().equals("Warp_Page")) {
-      LOGGER.at(Level.WARNING).log("Held item is not a warp page!");
+    if (heldItem == null || heldItem.isEmpty()) {
+      LOGGER.at(Level.WARNING).log("Held item is null");
       return false;
     }
 

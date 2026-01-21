@@ -59,7 +59,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
         for (short i = 0; i < container.getCapacity(); i++) {
             ItemStack warpPage = container.getItemStack(i);
 
-            if (warpPage == null || warpPage.isEmpty() || !warpPage.getItemId().equals("Warp_Page_Bound")) {
+            if (warpPage == null || warpPage.isEmpty()) {
                 continue;
             }
 

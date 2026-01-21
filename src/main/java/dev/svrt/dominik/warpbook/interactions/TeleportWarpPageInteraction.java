@@ -57,11 +57,6 @@ public class TeleportWarpPageInteraction extends SimpleInstantInteraction {
             return;
         }
 
-        if (!heldItem.getItemId().equals("Warp_Page_Bound")) {
-            context.getState().state = InteractionState.Failed;
-            return;
-        }
-
         boolean success = WarpPageInteractions.teleportPlayer(entityRef, entityRef.getStore(), heldItem);
         if (success) {
             context.getState().state = InteractionState.Finished;

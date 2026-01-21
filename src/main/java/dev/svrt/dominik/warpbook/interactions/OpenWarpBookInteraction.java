@@ -21,6 +21,7 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Sim
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import dev.svrt.dominik.warpbook.common.WarpPageBinding;
 import dev.svrt.dominik.warpbook.ui.WarpBookUI;
 
 import javax.annotation.Nonnull;
@@ -60,13 +61,6 @@ public class OpenWarpBookInteraction extends SimpleInstantInteraction {
             return;
         }
 
-        ItemStack heldItem = context.getHeldItem();
-
-        if (heldItem == null || !heldItem.getItemId().equals("Warp_Book")) {
-            context.getState().state = InteractionState.Failed;
-            return;
-        }
-
         ItemContainer hotbarContainer = context.getHeldItemContainer();
         short heldItemSlot = context.getHeldItemSlot();
         player.getWorld().execute(() -> {
@@ -86,7 +80,7 @@ public class OpenWarpBookInteraction extends SimpleInstantInteraction {
             }
             for (short i = 0; i < 27; i++) {
                 container.setSlotFilter(FilterActionType.ADD, i,
-                  (_, _, _, itemStack) -> itemStack != null && itemStack.getItemId().equals("Warp_Page_Bound"));
+                  (_, _, _, itemStack) -> itemStack != null && itemStack.getFromMetadataOrNull(WarpPageBinding.KEYED_CODEC) != null);
             }
 
             UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
