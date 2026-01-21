@@ -2,15 +2,20 @@ package dev.svrt.dominik.warpbook.common;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import dev.svrt.dominik.warpbook.WarpBookMod;
+import dev.svrt.dominik.warpbook.config.WarpBookConfig;
 
 import javax.annotation.Nonnull;
 import java.util.logging.Level;
@@ -42,9 +47,22 @@ public class WarpPageInteractionHandler {
     if (!WarpPageTeleportation.validateTeleportationRequest(player, binding)) {
       return false;
     }
+    WarpBookConfig config = WarpBookMod.getInstance().getConfig().get();
+    if (!config.isFreeTeleport() && player.getGameMode() != GameMode.Creative) {
+      CombinedItemContainer everything = player.getInventory().getCombinedEverything();
+      ItemStack itemStack = new ItemStack(config.getCostItemId(), config.getCostItemAmount());
+      ItemStackTransaction transaction = everything.removeItemStack(itemStack);
+      if (!transaction.succeeded()) {
+        Message first = Message.raw("You need ");
+        Message item = Message.translation(itemStack.getItem().getTranslationKey());
+        Message second = Message.raw(" ");
+        Message amount = Message.raw(String.valueOf(config.getCostItemAmount()));
+        player.sendMessage(Message.join(first, amount, second, item));
+        return false;
+      }
+    }
 
     new WarpPageTeleportation(binding, ref, store).start();
-
     return true;
   }
 

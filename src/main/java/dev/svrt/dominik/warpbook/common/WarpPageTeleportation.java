@@ -66,22 +66,26 @@ public class WarpPageTeleportation {
       LOGGER.at(Level.WARNING).log("Failed to get player component for teleportation!");
       return;
     }
-    World world = player.getWorld();
-    if (world == null) {
-      LOGGER.at(Level.WARNING).log("Failed to get world for teleportation!");
-      return;
-    }
 
+    TeleportationStorage storage = WarpBookMod.getInstance().getTeleportationStorage();
     UUIDComponent uuidComponent = entityStore.getComponent(entityRef, UUIDComponent.getComponentType());
     if (uuidComponent == null) {
       LOGGER.at(Level.WARNING).log("Failed to get UUID component for teleportation!");
       return;
     }
     UUID playerUUID = uuidComponent.getUuid();
+    if (storage.hasActiveTeleport(playerUUID)) {
+      player.sendMessage(Message.raw("Another teleportation is already in progress!"));
+      return;
+    }
 
-    TeleportationStorage storage = WarpBookMod.getInstance().getTeleportationStorage();
-    player.sendMessage(Message.raw("Teleporting in 2 seconds..."));
+    World world = player.getWorld();
+    if (world == null) {
+      LOGGER.at(Level.WARNING).log("Failed to get world for teleportation!");
+      return;
+    }
 
+    boolean instantTeleport = WarpBookMod.getInstance().getConfig().get().isInstantTeleport();
     scheduledTasks.add(HytaleServer.SCHEDULED_EXECUTOR.schedule(
       () -> {
         // Execute teleport on the world thread
@@ -104,12 +108,11 @@ public class WarpPageTeleportation {
             new Teleport(world, transform.getPosition(), transform.getRotation())
           );
 
-          player.sendMessage(Message.raw("Teleported successfully!"));
           storage.removeTeleportTask(playerUUID);
         });
         return null;
       },
-      2,
+      instantTeleport ? 0 : 2,
       TimeUnit.SECONDS
     ));
     scheduledTasks.add(HytaleServer.SCHEDULED_EXECUTOR.schedule(
@@ -129,7 +132,7 @@ public class WarpPageTeleportation {
         });
         return null;
       },
-      1,
+      instantTeleport ? 0 : 1,
       TimeUnit.SECONDS
     ));
 
@@ -142,7 +145,9 @@ public class WarpPageTeleportation {
     TransformComponent component = entityStore.getComponent(entityRef, TransformComponent.getComponentType());
     if (component == null) return;
     Vector3d position = component.getPosition();
-    ParticleUtil.spawnParticleEffect("Warp_Portal_Entry", position.clone(), entityStore);
+    if (!instantTeleport) {
+      ParticleUtil.spawnParticleEffect("Warp_Portal_Entry", position.clone(), entityStore);
+    }
     SoundUtil.playSoundEvent3d(
       SoundEvent.getAssetMap().getIndex("SFX_Skeleton_Mage_Spellbook_Charge"),
       SoundCategory.SFX,

@@ -56,17 +56,6 @@ public class TeleportWarpPageInteraction extends SimpleInstantInteraction {
             context.getState().state = InteractionState.Failed;
             return;
         }
-//
-//        MovementStatesComponent movementStatesComponent = entityRef.getStore().getComponent(entityRef, MovementStatesComponent.getComponentType());
-//        if (movementStatesComponent == null) {
-//            context.getState().state = InteractionState.Failed;
-//            return;
-//        }
-//        if (!movementStatesComponent.getMovementStates().onGround) {
-//            player.sendMessage(Message.raw("You need to be on the ground to teleport."));
-//            context.getState().state = InteractionState.Failed;
-//            return;
-//        }
 
         boolean success = WarpPageInteractionHandler.startTeleportPlayer(entityRef, entityRef.getStore(), heldItem);
         if (success) {

@@ -6,7 +6,9 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.ser
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.plugin.registry.CodecMapRegistry;
+import com.hypixel.hytale.server.core.util.Config;
 import dev.svrt.dominik.warpbook.common.TeleportationStorage;
+import dev.svrt.dominik.warpbook.config.WarpBookConfig;
 import dev.svrt.dominik.warpbook.interactions.OpenWarpBookInteraction;
 import dev.svrt.dominik.warpbook.interactions.TeleportWarpPageInteraction;
 import dev.svrt.dominik.warpbook.systems.TeleportCancelSystem;
@@ -22,15 +24,20 @@ public class WarpBookMod extends JavaPlugin {
 
     private static WarpBookMod instance;
 
+    private final Config<WarpBookConfig> config;
+
     private TeleportationStorage teleportationStorage;
 
     public WarpBookMod(@Nonnull JavaPluginInit init) {
         super(init);
         instance = this;
+        config = this.withConfig("WarpBookConfig", WarpBookConfig.CODEC);
     }
 
     @Override
     protected void setup() {
+        this.config.save();
+
         this.teleportationStorage = new TeleportationStorage();
 
         CodecMapRegistry.Assets<Interaction, ?> interactionRegistry = getCodecRegistry(Interaction.CODEC);
@@ -48,6 +55,10 @@ public class WarpBookMod extends JavaPlugin {
     @Override
     protected void shutdown() {
         teleportationStorage.shutdown();
+    }
+
+    public Config<WarpBookConfig> getConfig() {
+        return config;
     }
 
     public TeleportationStorage getTeleportationStorage() {
