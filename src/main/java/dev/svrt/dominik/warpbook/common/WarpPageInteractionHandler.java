@@ -16,6 +16,8 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.svrt.dominik.warpbook.WarpBookMod;
 import dev.svrt.dominik.warpbook.config.WarpBookConfig;
+import dev.svrt.dominik.warpbook.services.PaymentService;
+import dev.svrt.dominik.warpbook.services.TeleportationService;
 
 import javax.annotation.Nonnull;
 import java.util.logging.Level;
@@ -44,25 +46,19 @@ public class WarpPageInteractionHandler {
       LOGGER.at(Level.WARNING).log("Failed to get player!");
       return false;
     }
-    if (!WarpPageTeleportation.validateTeleportationRequest(player, binding)) {
+
+    TeleportationService teleportationService = WarpBookMod.getInstance().getTeleportationService();
+    PaymentService paymentService = WarpBookMod.getInstance().getPaymentService();
+
+    if (!teleportationService.validateTeleportationRequest(player, binding)) {
       return false;
     }
-    WarpBookConfig config = WarpBookMod.getInstance().getConfig().get();
-    if (!config.isFreeTeleport() && player.getGameMode() != GameMode.Creative) {
-      CombinedItemContainer everything = player.getInventory().getCombinedEverything();
-      ItemStack itemStack = new ItemStack(config.getCostItemId(), config.getCostItemAmount());
-      ItemStackTransaction transaction = everything.removeItemStack(itemStack);
-      if (!transaction.succeeded()) {
-        Message first = Message.raw("You need ");
-        Message item = Message.translation(itemStack.getItem().getTranslationKey());
-        Message second = Message.raw(" ");
-        Message amount = Message.raw(String.valueOf(config.getCostItemAmount()));
-        player.sendMessage(Message.join(first, amount, second, item));
+
+    if (!paymentService.processPayment(player)) {
         return false;
-      }
     }
 
-    new WarpPageTeleportation(binding, ref, store).start();
+    teleportationService.teleportPlayer(ref, store, binding);
     return true;
   }
 

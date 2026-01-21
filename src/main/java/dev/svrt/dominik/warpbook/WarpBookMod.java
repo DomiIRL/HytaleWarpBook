@@ -7,10 +7,11 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.plugin.registry.CodecMapRegistry;
 import com.hypixel.hytale.server.core.util.Config;
-import dev.svrt.dominik.warpbook.common.TeleportationStorage;
 import dev.svrt.dominik.warpbook.config.WarpBookConfig;
 import dev.svrt.dominik.warpbook.interactions.OpenWarpBookInteraction;
 import dev.svrt.dominik.warpbook.interactions.TeleportWarpPageInteraction;
+import dev.svrt.dominik.warpbook.services.PaymentService;
+import dev.svrt.dominik.warpbook.services.TeleportationService;
 import dev.svrt.dominik.warpbook.systems.TeleportCancelSystem;
 import dev.svrt.dominik.warpbook.ui.BindWarpPageUISupplier;
 import dev.svrt.dominik.warpbook.ui.WarpBookUISupplier;
@@ -26,7 +27,8 @@ public class WarpBookMod extends JavaPlugin {
 
     private final Config<WarpBookConfig> config;
 
-    private TeleportationStorage teleportationStorage;
+    private TeleportationService teleportationService;
+    private PaymentService paymentService;
 
     public WarpBookMod(@Nonnull JavaPluginInit init) {
         super(init);
@@ -38,7 +40,8 @@ public class WarpBookMod extends JavaPlugin {
     protected void setup() {
         this.config.save();
 
-        this.teleportationStorage = new TeleportationStorage();
+        this.teleportationService = new TeleportationService();
+        this.paymentService = new PaymentService();
 
         CodecMapRegistry.Assets<Interaction, ?> interactionRegistry = getCodecRegistry(Interaction.CODEC);
         interactionRegistry.register("TeleportWarpPageInteraction", TeleportWarpPageInteraction.class, TeleportWarpPageInteraction.CODEC);
@@ -54,15 +57,19 @@ public class WarpBookMod extends JavaPlugin {
 
     @Override
     protected void shutdown() {
-        teleportationStorage.shutdown();
+        teleportationService.shutdown();
     }
 
     public Config<WarpBookConfig> getConfig() {
         return config;
     }
 
-    public TeleportationStorage getTeleportationStorage() {
-        return teleportationStorage;
+    public TeleportationService getTeleportationService() {
+        return teleportationService;
+    }
+
+    public PaymentService getPaymentService() {
+        return paymentService;
     }
 
     public static WarpBookMod getInstance() {

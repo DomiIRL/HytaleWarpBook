@@ -17,8 +17,8 @@ import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.svrt.dominik.warpbook.WarpBookMod;
-import dev.svrt.dominik.warpbook.common.TeleportationStorage;
 import dev.svrt.dominik.warpbook.common.WarpPageTeleportation;
+import dev.svrt.dominik.warpbook.services.TeleportationService;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
@@ -41,7 +41,7 @@ public class TeleportCancelSystem extends EntityTickingSystem<EntityStore> {
     if (uuidComponent == null) return;
     UUID uuid = uuidComponent.getUuid();
 
-    TeleportationStorage storage = WarpBookMod.getInstance().getTeleportationStorage();
+    TeleportationService storage = WarpBookMod.getInstance().getTeleportationService();
     WarpPageTeleportation teleportTask = storage.getTeleportTask(uuid);
     if (teleportTask == null) {
       return;

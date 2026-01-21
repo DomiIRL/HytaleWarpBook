@@ -19,6 +19,7 @@ import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.svrt.dominik.warpbook.WarpBookMod;
+import dev.svrt.dominik.warpbook.services.TeleportationService;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -67,14 +68,14 @@ public class WarpPageTeleportation {
       return;
     }
 
-    TeleportationStorage storage = WarpBookMod.getInstance().getTeleportationStorage();
+    TeleportationService teleportationService = WarpBookMod.getInstance().getTeleportationService();
     UUIDComponent uuidComponent = entityStore.getComponent(entityRef, UUIDComponent.getComponentType());
     if (uuidComponent == null) {
       LOGGER.at(Level.WARNING).log("Failed to get UUID component for teleportation!");
       return;
     }
     UUID playerUUID = uuidComponent.getUuid();
-    if (storage.hasActiveTeleport(playerUUID)) {
+    if (teleportationService.hasActiveTeleport(playerUUID)) {
       player.sendMessage(Message.raw("Another teleportation is already in progress!"));
       return;
     }
@@ -92,12 +93,12 @@ public class WarpPageTeleportation {
         world.execute(() -> {
           if (!entityRef.isValid()) {
             LOGGER.at(Level.WARNING).log("Failed to teleport player! Entity is no longer valid.");
-            storage.removeTeleportTask(playerUUID);
+            teleportationService.removeTeleportTask(playerUUID);
             return;
           }
 
-          if (!validateTeleportationRequest(player, binding)) {
-            storage.removeTeleportTask(playerUUID);
+          if (!teleportationService.validateTeleportationRequest(player, binding)) {
+            teleportationService.removeTeleportTask(playerUUID);
             return;
           }
 
@@ -108,7 +109,7 @@ public class WarpPageTeleportation {
             new Teleport(world, transform.getPosition(), transform.getRotation())
           );
 
-          storage.removeTeleportTask(playerUUID);
+          teleportationService.removeTeleportTask(playerUUID);
         });
         return null;
       },
@@ -140,7 +141,7 @@ public class WarpPageTeleportation {
       WarpBookMod.getInstance().getTaskRegistry().registerTask(task);
     }
 
-    storage.registerTeleportTask(playerUUID, this);
+    teleportationService.registerTeleportTask(playerUUID, this);
 
     TransformComponent component = entityStore.getComponent(entityRef, TransformComponent.getComponentType());
     if (component == null) return;
@@ -177,21 +178,6 @@ public class WarpPageTeleportation {
 
   public Vector3d getStartPosition() {
     return startPosition;
-  }
-
-  public static boolean validateTeleportationRequest(Player player, WarpPageBinding binding) {
-    World currentWorld = player.getWorld();
-    if (currentWorld == null) {
-      LOGGER.at(Level.WARNING).log("Failed to get current world!");
-      return false;
-    }
-    if (!currentWorld.getName().equals(binding.world)) {
-      player.sendMessage(Message.raw(String.format(
-        "You are not in the correct world! (%s)", binding.world
-      )));
-      return false;
-    }
-    return true;
   }
 
 }
