@@ -4,19 +4,26 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.server.core.HytaleServer;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.svrt.dominik.warpbook.WarpBookMod;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +38,7 @@ public class WarpPageTeleportation {
   private final Store<EntityStore> entityStore;
   private final Instant startTimestamp;
   private final Vector3d startPosition;
-  private ScheduledFuture<Void> scheduledTask;
+  private final List<ScheduledFuture<Void>> scheduledTasks = new LinkedList<>();
 
   public WarpPageTeleportation(WarpPageBinding binding, Ref<EntityStore> entityRef, Store<EntityStore> entityStore) {
     this.binding = binding;
@@ -48,10 +55,20 @@ public class WarpPageTeleportation {
     }
   }
 
-  public void start(World world) {
+  public void start() {
+    if (!scheduledTasks.isEmpty()) {
+      LOGGER.at(Level.WARNING).log("Teleportation already started!");
+      return;
+    }
+
     Player player = entityStore.getComponent(entityRef, Player.getComponentType());
     if (player == null) {
       LOGGER.at(Level.WARNING).log("Failed to get player component for teleportation!");
+      return;
+    }
+    World world = player.getWorld();
+    if (world == null) {
+      LOGGER.at(Level.WARNING).log("Failed to get world for teleportation!");
       return;
     }
 
@@ -63,17 +80,19 @@ public class WarpPageTeleportation {
     UUID playerUUID = uuidComponent.getUuid();
 
     TeleportationStorage storage = WarpBookMod.getInstance().getTeleportationStorage();
-
-    storage.cancelTeleport(playerUUID);
-
     player.sendMessage(Message.raw("Teleporting in 2 seconds..."));
 
-    scheduledTask = HytaleServer.SCHEDULED_EXECUTOR.schedule(
+    scheduledTasks.add(HytaleServer.SCHEDULED_EXECUTOR.schedule(
       () -> {
         // Execute teleport on the world thread
         world.execute(() -> {
           if (!entityRef.isValid()) {
             LOGGER.at(Level.WARNING).log("Failed to teleport player! Entity is no longer valid.");
+            storage.removeTeleportTask(playerUUID);
+            return;
+          }
+
+          if (!validateTeleportationRequest(player, binding)) {
             storage.removeTeleportTask(playerUUID);
             return;
           }
@@ -92,24 +111,58 @@ public class WarpPageTeleportation {
       },
       2,
       TimeUnit.SECONDS
-    );
+    ));
+    scheduledTasks.add(HytaleServer.SCHEDULED_EXECUTOR.schedule(
+      () -> {
+        world.execute(() -> {
+          PlayerRef playerRef = entityStore.getComponent(entityRef, PlayerRef.getComponentType());
+          if (playerRef == null) {
+            LOGGER.at(Level.WARNING).log("Failed to get player component for teleportation!");
+            return;
+          }
+          SoundUtil.playSoundEvent2dToPlayer(
+            playerRef,
+            SoundEvent.getAssetMap().getIndex("SFX_Portal_Neutral_Open"),
+            SoundCategory.SFX,
+            5, 0.7f
+          );
+        });
+        return null;
+      },
+      150,
+      TimeUnit.MILLISECONDS
+    ));
 
-    WarpBookMod.getInstance().getTaskRegistry().registerTask(scheduledTask);
+    for (ScheduledFuture<Void> task : scheduledTasks) {
+      WarpBookMod.getInstance().getTaskRegistry().registerTask(task);
+    }
+
     storage.registerTeleportTask(playerUUID, this);
 
-    // spawn particle
-    world.execute(() -> {
-    });
+    TransformComponent component = entityStore.getComponent(entityRef, TransformComponent.getComponentType());
+    if (component == null) return;
+    Vector3d position = component.getPosition();
+    ParticleUtil.spawnParticleEffect("Warp_Portal_Entry", position.clone(), entityStore);
+    SoundUtil.playSoundEvent3d(
+      SoundEvent.getAssetMap().getIndex("SFX_Skeleton_Mage_Spellbook_Charge"),
+      SoundCategory.SFX,
+      position.getX(), position.getY(), position.getZ(),
+      3, 0.5f,
+      entityStore
+    );
   }
 
   public void cancel() {
-    if (scheduledTask != null && !scheduledTask.isDone()) {
-      scheduledTask.cancel(false);
-
-      PlayerRef component = entityStore.getComponent(entityRef, PlayerRef.getComponentType());
-      if (component != null) {
-        component.sendMessage(Message.raw("Teleportation cancelled."));
+    for (ScheduledFuture<Void> task : scheduledTasks) {
+      if (!task.isDone()) {
+        task.cancel(false);
       }
+    }
+    scheduledTasks.clear();
+
+    PlayerRef component = entityStore.getComponent(entityRef, PlayerRef.getComponentType());
+    if (component != null) {
+      component.sendMessage(Message.raw("Teleportation cancelled."));
     }
   }
 
@@ -120,4 +173,20 @@ public class WarpPageTeleportation {
   public Vector3d getStartPosition() {
     return startPosition;
   }
+
+  public static boolean validateTeleportationRequest(Player player, WarpPageBinding binding) {
+    World currentWorld = player.getWorld();
+    if (currentWorld == null) {
+      LOGGER.at(Level.WARNING).log("Failed to get current world!");
+      return false;
+    }
+    if (!currentWorld.getName().equals(binding.world)) {
+      player.sendMessage(Message.raw(String.format(
+        "You are not in the correct world! (%s)", binding.world
+      )));
+      return false;
+    }
+    return true;
+  }
+
 }

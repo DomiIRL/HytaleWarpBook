@@ -39,15 +39,11 @@ public class WarpPageInteractionHandler {
       LOGGER.at(Level.WARNING).log("Failed to get player!");
       return false;
     }
-    World currentWorld = player.getWorld();
-    if (!currentWorld.getName().equals(binding.world)) {
-      player.sendMessage(Message.raw(String.format(
-        "You are not in the correct world! (%s)", binding.world
-      )));
+    if (!WarpPageTeleportation.validateTeleportationRequest(player, binding)) {
       return false;
     }
 
-    new WarpPageTeleportation(binding, ref, store).start(currentWorld);
+    new WarpPageTeleportation(binding, ref, store).start();
 
     return true;
   }

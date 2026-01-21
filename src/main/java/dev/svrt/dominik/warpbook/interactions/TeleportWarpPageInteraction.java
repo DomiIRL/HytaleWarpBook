@@ -7,6 +7,7 @@ import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.WaitForDataFrom;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
@@ -50,8 +51,17 @@ public class TeleportWarpPageInteraction extends SimpleInstantInteraction {
         }
 
         ItemStack heldItem = context.getHeldItem();
-
         if (heldItem == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+
+        MovementStatesComponent movementStatesComponent = entityRef.getStore().getComponent(entityRef, MovementStatesComponent.getComponentType());
+        if (movementStatesComponent == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        if (!movementStatesComponent.getMovementStates().onGround) {
             context.getState().state = InteractionState.Failed;
             return;
         }
