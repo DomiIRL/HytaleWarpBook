@@ -14,7 +14,7 @@ import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import dev.svrt.dominik.warpbook.common.WarpPageInteractions;
+import dev.svrt.dominik.warpbook.common.WarpPageInteractionHandler;
 
 import javax.annotation.Nonnull;
 
@@ -53,7 +53,7 @@ public class BindWarpPageUI extends InteractiveCustomUIPage<BindWarpPageUI.BindW
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store,
                                 @Nonnull BindWarpPageEventData data) {
         if (data.name == null) {
-            boolean success = WarpPageInteractions.bindHeldWarpPage(ref, store, context, this.name);
+            boolean success = WarpPageInteractionHandler.bindHeldWarpPage(ref, store, context, this.name);
             if (success) {
                 close();
             }

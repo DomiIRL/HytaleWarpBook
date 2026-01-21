@@ -1,7 +1,6 @@
 package dev.svrt.dominik.warpbook.interactions;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionType;
@@ -12,7 +11,7 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import dev.svrt.dominik.warpbook.common.WarpPageInteractions;
+import dev.svrt.dominik.warpbook.common.WarpPageInteractionHandler;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
 import javax.annotation.Nonnull;
@@ -57,7 +56,7 @@ public class TeleportWarpPageInteraction extends SimpleInstantInteraction {
             return;
         }
 
-        boolean success = WarpPageInteractions.teleportPlayer(entityRef, entityRef.getStore(), heldItem);
+        boolean success = WarpPageInteractionHandler.startTeleportPlayer(entityRef, entityRef.getStore(), heldItem);
         if (success) {
             context.getState().state = InteractionState.Finished;
         } else {

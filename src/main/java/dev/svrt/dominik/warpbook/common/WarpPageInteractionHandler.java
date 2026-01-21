@@ -2,7 +2,6 @@ package dev.svrt.dominik.warpbook.common;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -10,7 +9,6 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
@@ -19,9 +17,9 @@ import java.util.logging.Level;
 
 import static dev.svrt.dominik.warpbook.WarpBookMod.LOGGER;
 
-public class WarpPageInteractions {
+public class WarpPageInteractionHandler {
 
-  public static boolean teleportPlayer(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull ItemStack itemStack) {
+  public static boolean startTeleportPlayer(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull ItemStack itemStack) {
     Player player = store.getComponent(ref, Player.getComponentType());
     if (player == null) {
       LOGGER.at(Level.WARNING).log("Failed to get player!");
@@ -32,10 +30,10 @@ public class WarpPageInteractions {
       player.sendMessage(Message.raw("Warp page has no binding!"));
       return false;
     }
-    return teleportPlayer(ref, store, positionBinding);
+    return startTeleportPlayer(ref, store, positionBinding);
   }
 
-  public static boolean teleportPlayer(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull WarpPageBinding binding) {
+  public static boolean startTeleportPlayer(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull WarpPageBinding binding) {
     Player player = store.getComponent(ref, Player.getComponentType());
     if (player == null || player.getWorld() == null) {
       LOGGER.at(Level.WARNING).log("Failed to get player!");
@@ -49,15 +47,7 @@ public class WarpPageInteractions {
       return false;
     }
 
-    currentWorld.execute(() -> {
-      if (!ref.isValid()) {
-        LOGGER.at(Level.WARNING).log("Failed to teleport player! Entity is no longer valid.");
-        return;
-      }
-
-      Transform transform = binding.transform;
-      store.addComponent(ref, Teleport.getComponentType(), new Teleport(currentWorld, transform.getPosition(), transform.getRotation()));
-    });
+    new WarpPageTeleportation(binding, ref, store).start(currentWorld);
 
     return true;
   }
