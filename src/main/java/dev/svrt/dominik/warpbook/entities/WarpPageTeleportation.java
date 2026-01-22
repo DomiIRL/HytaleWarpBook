@@ -167,14 +167,16 @@ public class WarpPageTeleportation {
   private void playStartEffects(boolean instant) {
     TransformComponent component = entityStore.getComponent(entityRef, TransformComponent.getComponentType());
     if (component == null) return;
-    Vector3d position = component.getPosition();
+    Vector3d from = component.getPosition();
+    Vector3d to = binding.transform.getPosition();
     if (!instant) {
-      ParticleUtil.spawnParticleEffect("Warp_Portal_Entry", position.clone(), entityStore);
+      ParticleUtil.spawnParticleEffect("Warp_Portal_Entry", from.clone(), entityStore);
+      ParticleUtil.spawnParticleEffect("Warp_Portal_Entry", to.clone(), entityStore);
     }
     SoundUtil.playSoundEvent3d(
       SoundEvent.getAssetMap().getIndex("SFX_Skeleton_Mage_Spellbook_Charge"),
       SoundCategory.SFX,
-      position.getX(), position.getY(), position.getZ(),
+      from.getX(), from.getY(), from.getZ(),
       3, 0.5f,
       entityStore
     );
