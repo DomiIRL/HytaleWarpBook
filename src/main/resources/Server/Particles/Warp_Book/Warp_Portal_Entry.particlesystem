@@ -1,0 +1,73 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Warp_Portal_Ground"
+    },
+    {
+      "SpawnerId": "Warp_Portal_Ground_Core_Spawn",
+      "PositionOffset": {
+        "X": 0,
+        "Z": 0
+      },
+      "FixedRotation": false,
+      "StartDelay": 1.5
+    },
+    {
+      "SpawnerId": "Warp_Portal_Ground_Core_Start",
+      "StartDelay": 0.9,
+      "PositionOffset": {
+        "Y": -0.25
+      }
+    },
+    {
+      "SpawnerId": "Warp_Portal_Ground_Beam_Constant",
+      "RotationOffset": {
+        "Pitch": 0.0,
+        "Roll": -90.0
+      },
+      "StartDelay": 1.2,
+      "LifeSpan": {
+        "Min": 1.3,
+        "Max": 1.3
+      }
+    },
+    {
+      "SpawnerId": "Warp_Portal_Ground_Beam_Constant2",
+      "RotationOffset": {
+        "Roll": -90.0
+      },
+      "StartDelay": 1.4,
+      "LifeSpan": {
+        "Min": 1.0,
+        "Max": 1.0
+      },
+      "PositionOffset": {
+        "Y": 0.0
+      }
+    },
+    {
+      "SpawnerId": "Warp_Portal_Ground_Beam",
+      "StartDelay": 2.7
+    },
+    {
+      "SpawnerId": "Warp_Portal_Ground_Core_Start2",
+      "PositionOffset": {
+        "X": 0,
+        "Z": 0
+      },
+      "FixedRotation": false,
+      "StartDelay": 2.6
+    },
+    {
+      "SpawnerId": "Warp_Portal_Ground_Start3",
+      "PositionOffset": {
+        "X": 0,
+        "Z": 0
+      },
+      "FixedRotation": false,
+      "StartDelay": 2.6
+    }
+  ],
+  "CullDistance": 100,
+  "LifeSpan": 2
+}
