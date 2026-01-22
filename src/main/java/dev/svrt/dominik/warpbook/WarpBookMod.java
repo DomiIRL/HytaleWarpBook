@@ -10,10 +10,7 @@ import com.hypixel.hytale.server.core.util.Config;
 import dev.svrt.dominik.warpbook.config.WarpBookConfig;
 import dev.svrt.dominik.warpbook.interactions.OpenWarpBookInteraction;
 import dev.svrt.dominik.warpbook.interactions.TeleportWarpPageInteraction;
-import dev.svrt.dominik.warpbook.services.PaymentService;
-import dev.svrt.dominik.warpbook.services.TeleportationService;
-import dev.svrt.dominik.warpbook.services.WarpPageBindingService;
-import dev.svrt.dominik.warpbook.services.WarpPageUsageService;
+import dev.svrt.dominik.warpbook.services.*;
 import dev.svrt.dominik.warpbook.systems.TeleportCancelSystem;
 import dev.svrt.dominik.warpbook.ui.BindWarpPageUISupplier;
 import dev.svrt.dominik.warpbook.ui.WarpBookUISupplier;
@@ -31,6 +28,7 @@ public class WarpBookMod extends JavaPlugin {
 
     private WarpPageBindingService warpPageBindingService;
     private WarpPageUsageService warpPageUsageService;
+    private WarpBookService warpBookService;
     private TeleportationService teleportationService;
     private PaymentService paymentService;
 
@@ -46,6 +44,7 @@ public class WarpBookMod extends JavaPlugin {
 
         this.warpPageBindingService = new WarpPageBindingService();
         this.warpPageUsageService = new WarpPageUsageService();
+        this.warpBookService = new WarpBookService();
         this.teleportationService = new TeleportationService();
         this.paymentService = new PaymentService();
 
@@ -76,6 +75,10 @@ public class WarpBookMod extends JavaPlugin {
 
     public WarpPageUsageService getWarpPageUsageService() {
         return warpPageUsageService;
+    }
+
+    public WarpBookService getWarpBookService() {
+        return warpBookService;
     }
 
     public TeleportationService getTeleportationService() {

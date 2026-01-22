@@ -1,4 +1,4 @@
-package dev.svrt.dominik.warpbook.common;
+package dev.svrt.dominik.warpbook.services;
 
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.ItemStackItemContainer;
@@ -7,15 +7,11 @@ import com.hypixel.hytale.server.core.inventory.container.filter.FilterActionTyp
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class WarpBookInventory {
+public class WarpBookService {
 
   @Nullable
-  public static ItemStackItemContainer ensureWarpBookContainer(@Nonnull ItemContainer container, short slot) {
-    ItemStackItemContainer itemStackItemContainer = ItemStackItemContainer.ensureContainer(
-      container,
-      slot,
-      (short) 27
-    );
+  public ItemStackItemContainer ensureWarpBookContainer(@Nonnull ItemContainer container, short slot) {
+    ItemStackItemContainer itemStackItemContainer = ItemStackItemContainer.ensureContainer(container, slot, (short) 27);
     if (itemStackItemContainer == null) {
       return null;
     }
