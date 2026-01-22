@@ -15,7 +15,7 @@ build/
 libs/
 
 ### Local Server ###
-Server/
+/Server/
 
 ### IntelliJ IDEA ###
 .idea

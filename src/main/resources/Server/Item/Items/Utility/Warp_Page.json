@@ -1,0 +1,74 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Warp_Page.name",
+    "Description": "server.items.Warp_Page.description"
+  },
+  "Quality": "Uncommon",
+  "MaxStack": 1,
+  "ItemLevel": 30,
+  "PlayerAnimationsId": "Item",
+  "Model": "Items/Utility/Warp_Page/Warp_Page.blockymodel",
+  "Texture": "Items/Utility/Warp_Page/Warp_Page.png",
+  "IconProperties": {
+    "Scale": 0.76,
+    "Rotation": [
+      135,
+      135,
+      0
+    ],
+    "Translation": [
+      -1,
+      5
+    ]
+  },
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "OpenCustomUI",
+          "Page": {
+            "Id": "Bind_Warp_Page_UI"
+          }
+        }
+      ]
+    }
+  },
+  "UsePlayerAnimations": false,
+  "Icon": "Icons/ItemsGenerated/Warp_Page.png",
+  "Tags": {
+    "Type": [
+      "Tool"
+    ],
+    "Family": []
+  },
+  "Categories": [
+    "Items.Tools"
+  ],
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Wood_Azure_Trunk",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Plant_Crop_Mana3",
+        "Quantity": 1
+      },
+      {
+        "ItemId": "Ingredient_Fabric_Scrap_Linen",
+        "Quantity": 1
+      }
+    ],
+    "OutputQuantity": 1,
+    "TimeSeconds": 3,
+    "BenchRequirement": [
+      {
+        "Id": "Arcanebench",
+        "Type": "Crafting",
+        "Categories": [
+          "Arcane_Misc"
+        ]
+      }
+    ]
+  }
+}
