@@ -8,7 +8,6 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.damage.DamageDataComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -17,7 +16,7 @@ import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.svrt.dominik.warpbook.WarpBookMod;
-import dev.svrt.dominik.warpbook.common.WarpPageTeleportation;
+import dev.svrt.dominik.warpbook.entities.WarpPageTeleportation;
 import dev.svrt.dominik.warpbook.services.TeleportationService;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
@@ -28,7 +27,6 @@ import java.util.UUID;
 public class TeleportCancelSystem extends EntityTickingSystem<EntityStore> {
 
   private final ComponentType<EntityStore, PlayerRef> playerRefComponentType = PlayerRef.getComponentType();
-  private final ComponentType<EntityStore, Player> playerComponentType = Player.getComponentType();
   private final ComponentType<EntityStore, EntityStatMap> entityStatMapComponentType = EntityStatMap.getComponentType();
   private final ComponentType<EntityStore, DamageDataComponent> damageComponentType = DamageDataComponent.getComponentType();
   private final ComponentType<EntityStore, UUIDComponent> uuidComponentComponentType = UUIDComponent.getComponentType();

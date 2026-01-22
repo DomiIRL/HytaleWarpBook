@@ -12,6 +12,8 @@ import dev.svrt.dominik.warpbook.interactions.OpenWarpBookInteraction;
 import dev.svrt.dominik.warpbook.interactions.TeleportWarpPageInteraction;
 import dev.svrt.dominik.warpbook.services.PaymentService;
 import dev.svrt.dominik.warpbook.services.TeleportationService;
+import dev.svrt.dominik.warpbook.services.WarpPageBindingService;
+import dev.svrt.dominik.warpbook.services.WarpPageUsageService;
 import dev.svrt.dominik.warpbook.systems.TeleportCancelSystem;
 import dev.svrt.dominik.warpbook.ui.BindWarpPageUISupplier;
 import dev.svrt.dominik.warpbook.ui.WarpBookUISupplier;
@@ -27,6 +29,8 @@ public class WarpBookMod extends JavaPlugin {
 
     private final Config<WarpBookConfig> config;
 
+    private WarpPageBindingService warpPageBindingService;
+    private WarpPageUsageService warpPageUsageService;
     private TeleportationService teleportationService;
     private PaymentService paymentService;
 
@@ -40,6 +44,8 @@ public class WarpBookMod extends JavaPlugin {
     protected void setup() {
         this.config.save();
 
+        this.warpPageBindingService = new WarpPageBindingService();
+        this.warpPageUsageService = new WarpPageUsageService();
         this.teleportationService = new TeleportationService();
         this.paymentService = new PaymentService();
 
@@ -62,6 +68,14 @@ public class WarpBookMod extends JavaPlugin {
 
     public Config<WarpBookConfig> getConfig() {
         return config;
+    }
+
+    public WarpPageBindingService getWarpPageBindingService() {
+        return warpPageBindingService;
+    }
+
+    public WarpPageUsageService getWarpPageUsageService() {
+        return warpPageUsageService;
     }
 
     public TeleportationService getTeleportationService() {

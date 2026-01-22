@@ -1,4 +1,4 @@
-package dev.svrt.dominik.warpbook.common;
+package dev.svrt.dominik.warpbook.data;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;

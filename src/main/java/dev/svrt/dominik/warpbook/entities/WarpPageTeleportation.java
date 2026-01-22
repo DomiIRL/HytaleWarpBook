@@ -1,4 +1,4 @@
-package dev.svrt.dominik.warpbook.common;
+package dev.svrt.dominik.warpbook.entities;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -19,10 +19,10 @@ import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.svrt.dominik.warpbook.WarpBookMod;
+import dev.svrt.dominik.warpbook.data.WarpPageBinding;
 import dev.svrt.dominik.warpbook.services.TeleportationService;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;

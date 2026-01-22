@@ -12,7 +12,6 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.windows.ItemStackContainerWindow;
 import com.hypixel.hytale.server.core.entity.entities.player.windows.Window;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.ItemStackItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.filter.FilterActionType;
@@ -21,11 +20,9 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Sim
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import dev.svrt.dominik.warpbook.common.WarpPageBinding;
-import dev.svrt.dominik.warpbook.ui.WarpBookUI;
+import dev.svrt.dominik.warpbook.data.WarpPageBinding;
 
 import javax.annotation.Nonnull;
-import java.util.UUID;
 
 public class OpenWarpBookInteraction extends SimpleInstantInteraction {
 

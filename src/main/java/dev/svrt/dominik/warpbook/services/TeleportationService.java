@@ -7,8 +7,8 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import dev.svrt.dominik.warpbook.common.WarpPageBinding;
-import dev.svrt.dominik.warpbook.common.WarpPageTeleportation;
+import dev.svrt.dominik.warpbook.data.WarpPageBinding;
+import dev.svrt.dominik.warpbook.entities.WarpPageTeleportation;
 
 import java.util.Map;
 import java.util.UUID;
