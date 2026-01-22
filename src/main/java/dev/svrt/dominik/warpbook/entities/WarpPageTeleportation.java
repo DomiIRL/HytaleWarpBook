@@ -63,18 +63,16 @@ public class WarpPageTeleportation {
     }
 
     Player player = entityStore.getComponent(entityRef, Player.getComponentType());
-    if (player == null) {
-      LOGGER.at(Level.WARNING).log("Failed to get player component for teleportation!");
+    UUIDComponent uuidComponent = entityStore.getComponent(entityRef, UUIDComponent.getComponentType());
+
+    if (player == null || uuidComponent == null) {
+      LOGGER.at(Level.WARNING).log("Failed to get necessary components for teleportation!");
       return;
     }
 
     TeleportationService teleportationService = WarpBookMod.getInstance().getTeleportationService();
-    UUIDComponent uuidComponent = entityStore.getComponent(entityRef, UUIDComponent.getComponentType());
-    if (uuidComponent == null) {
-      LOGGER.at(Level.WARNING).log("Failed to get UUID component for teleportation!");
-      return;
-    }
     UUID playerUUID = uuidComponent.getUuid();
+
     if (teleportationService.hasActiveTeleport(playerUUID)) {
       player.sendMessage(Message.raw("Another teleportation is already in progress!"));
       return;
@@ -87,66 +85,90 @@ public class WarpPageTeleportation {
     }
 
     boolean instantTeleport = WarpBookMod.getInstance().getConfig().get().isInstantTeleport();
+
+    scheduleTeleportTask(world, playerUUID, teleportationService, instantTeleport);
+    scheduleSoundTask(world, instantTeleport);
+    registerTasks(playerUUID, teleportationService);
+    playStartEffects(instantTeleport);
+  }
+
+  private void scheduleTeleportTask(World world, UUID playerUUID, TeleportationService service, boolean instant) {
     scheduledTasks.add(HytaleServer.SCHEDULED_EXECUTOR.schedule(
       () -> {
-        // Execute teleport on the world thread
-        world.execute(() -> {
-          if (!entityRef.isValid()) {
-            LOGGER.at(Level.WARNING).log("Failed to teleport player! Entity is no longer valid.");
-            teleportationService.removeTeleportTask(playerUUID);
-            return;
-          }
-
-          if (!teleportationService.validateTeleportationRequest(player, binding)) {
-            teleportationService.removeTeleportTask(playerUUID);
-            return;
-          }
-
-          Transform transform = binding.transform;
-          entityStore.addComponent(
-            entityRef,
-            Teleport.getComponentType(),
-            new Teleport(world, transform.getPosition(), transform.getRotation())
-          );
-
-          teleportationService.removeTeleportTask(playerUUID);
-        });
+        world.execute(() -> executeTeleport(world, playerUUID, service));
         return null;
       },
-      instantTeleport ? 0 : 2,
+      instant ? 0 : 2,
       TimeUnit.SECONDS
     ));
+  }
+
+  private void executeTeleport(World world, UUID playerUUID, TeleportationService service) {
+    if (!entityRef.isValid()) {
+      LOGGER.at(Level.WARNING).log("Failed to teleport player! Entity is no longer valid.");
+      service.removeTeleportTask(playerUUID);
+      return;
+    }
+
+    Player player = entityStore.getComponent(entityRef, Player.getComponentType());
+    if (player == null) {
+      LOGGER.at(Level.WARNING).log("Failed to get player component during teleport execution!");
+      service.removeTeleportTask(playerUUID);
+      return;
+    }
+
+    if (!service.validateTeleportationRequest(player, binding)) {
+      service.removeTeleportTask(playerUUID);
+      return;
+    }
+
+    Transform transform = binding.transform;
+    entityStore.addComponent(
+      entityRef,
+      Teleport.getComponentType(),
+      new Teleport(world, transform.getPosition(), transform.getRotation())
+    );
+
+    service.removeTeleportTask(playerUUID);
+  }
+
+  private void scheduleSoundTask(World world, boolean instant) {
     scheduledTasks.add(HytaleServer.SCHEDULED_EXECUTOR.schedule(
       () -> {
-        world.execute(() -> {
-          PlayerRef playerRef = entityStore.getComponent(entityRef, PlayerRef.getComponentType());
-          if (playerRef == null) {
-            LOGGER.at(Level.WARNING).log("Failed to get player component for teleportation!");
-            return;
-          }
-          SoundUtil.playSoundEvent2dToPlayer(
-            playerRef,
-            SoundEvent.getAssetMap().getIndex("SFX_Portal_Neutral_Open"),
-            SoundCategory.SFX,
-            5, 1f
-          );
-        });
+        world.execute(this::playTeleportSound);
         return null;
       },
-      instantTeleport ? 0 : 1,
+      instant ? 0 : 1,
       TimeUnit.SECONDS
     ));
+  }
 
+  private void playTeleportSound() {
+    PlayerRef playerRef = entityStore.getComponent(entityRef, PlayerRef.getComponentType());
+    if (playerRef == null) {
+      LOGGER.at(Level.WARNING).log("Failed to get player component for teleportation!");
+      return;
+    }
+    SoundUtil.playSoundEvent2dToPlayer(
+      playerRef,
+      SoundEvent.getAssetMap().getIndex("SFX_Portal_Neutral_Open"),
+      SoundCategory.SFX,
+      5, 1f
+    );
+  }
+
+  private void registerTasks(UUID playerUUID, TeleportationService service) {
     for (ScheduledFuture<Void> task : scheduledTasks) {
       WarpBookMod.getInstance().getTaskRegistry().registerTask(task);
     }
+    service.registerTeleportTask(playerUUID, this);
+  }
 
-    teleportationService.registerTeleportTask(playerUUID, this);
-
+  private void playStartEffects(boolean instant) {
     TransformComponent component = entityStore.getComponent(entityRef, TransformComponent.getComponentType());
     if (component == null) return;
     Vector3d position = component.getPosition();
-    if (!instantTeleport) {
+    if (!instant) {
       ParticleUtil.spawnParticleEffect("Warp_Portal_Entry", position.clone(), entityStore);
     }
     SoundUtil.playSoundEvent3d(
