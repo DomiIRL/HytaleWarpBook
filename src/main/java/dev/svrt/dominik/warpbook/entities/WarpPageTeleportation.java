@@ -118,7 +118,7 @@ public class WarpPageTeleportation {
     entityStore.addComponent(
       entityRef,
       Teleport.getComponentType(),
-      new Teleport(world, transform.getPosition(), transform.getRotation())
+      Teleport.createForPlayer(world, transform)
     );
 
     double distance = calculateDistance(startPosition, transform.getPosition());
