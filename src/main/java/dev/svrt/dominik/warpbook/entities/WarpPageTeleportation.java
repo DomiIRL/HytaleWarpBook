@@ -2,6 +2,7 @@ package dev.svrt.dominik.warpbook.entities;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.spatial.SpatialResource;
 import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.protocol.SoundCategory;
@@ -10,6 +11,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.modules.entity.EntityModule;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
@@ -21,8 +23,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.svrt.dominik.warpbook.WarpBookMod;
 import dev.svrt.dominik.warpbook.data.WarpPageBinding;
 import dev.svrt.dominik.warpbook.services.TeleportationService;
-
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +35,12 @@ import java.util.logging.Level;
 import static dev.svrt.dominik.warpbook.WarpBookMod.LOGGER;
 
 public class WarpPageTeleportation {
+
+  private static final String PARTICLE_ENTRY = "Warp_Portal_Entry";
+  private static final String PARTICLE_ARRIVAL = "Warp_Portal_Arrival";
+  private static final String SOUND_OPEN = "SFX_Portal_Neutral_Open";
+  private static final String SOUND_CHARGE = "SFX_Skeleton_Mage_Spellbook_Charge";
+  private static final double PARTICLE_DISTANCE_THRESHOLD = 100.0;
 
   private final WarpPageBinding binding;
   private final Ref<EntityStore> entityRef;
@@ -104,23 +112,7 @@ public class WarpPageTeleportation {
   }
 
   private void executeTeleport(World world, UUID playerUUID, TeleportationService service) {
-    if (!entityRef.isValid()) {
-      LOGGER.at(Level.WARNING).log("Failed to teleport player! Entity is no longer valid.");
-      service.removeTeleportTask(playerUUID);
-      return;
-    }
-
-    Player player = entityStore.getComponent(entityRef, Player.getComponentType());
-    if (player == null) {
-      LOGGER.at(Level.WARNING).log("Failed to get player component during teleport execution!");
-      service.removeTeleportTask(playerUUID);
-      return;
-    }
-
-    if (!service.validateTeleportationRequest(player, binding)) {
-      service.removeTeleportTask(playerUUID);
-      return;
-    }
+    if (!validateTeleportExecution(service, playerUUID)) return;
 
     Transform transform = binding.transform;
     entityStore.addComponent(
@@ -129,7 +121,34 @@ public class WarpPageTeleportation {
       new Teleport(world, transform.getPosition(), transform.getRotation())
     );
 
+    double distance = calculateDistance(startPosition, transform.getPosition());
+    if (distance >= PARTICLE_DISTANCE_THRESHOLD) {
+      spawnDestinationParticle(transform.getPosition());
+    }
+
     service.removeTeleportTask(playerUUID);
+  }
+
+  private boolean validateTeleportExecution(TeleportationService service, UUID playerUUID) {
+    if (!entityRef.isValid()) {
+      LOGGER.at(Level.WARNING).log("Failed to teleport player! Entity is no longer valid.");
+      service.removeTeleportTask(playerUUID);
+      return false;
+    }
+
+    Player player = entityStore.getComponent(entityRef, Player.getComponentType());
+    if (player == null) {
+      LOGGER.at(Level.WARNING).log("Failed to get player component during teleport execution!");
+      service.removeTeleportTask(playerUUID);
+      return false;
+    }
+
+    if (!service.validateTeleportationRequest(player, binding)) {
+      service.removeTeleportTask(playerUUID);
+      return false;
+    }
+
+    return true;
   }
 
   private void scheduleSoundTask(World world, boolean instant) {
@@ -151,7 +170,7 @@ public class WarpPageTeleportation {
     }
     SoundUtil.playSoundEvent2dToPlayer(
       playerRef,
-      SoundEvent.getAssetMap().getIndex("SFX_Portal_Neutral_Open"),
+      SoundEvent.getAssetMap().getIndex(SOUND_OPEN),
       SoundCategory.SFX,
       5, 1f
     );
@@ -169,17 +188,35 @@ public class WarpPageTeleportation {
     if (component == null) return;
     Vector3d from = component.getPosition();
     Vector3d to = binding.transform.getPosition();
+
     if (!instant) {
-      ParticleUtil.spawnParticleEffect("Warp_Portal_Entry", from.clone(), entityStore);
-      ParticleUtil.spawnParticleEffect("Warp_Portal_Entry", to.clone(), entityStore);
+      ParticleUtil.spawnParticleEffect(PARTICLE_ENTRY, from.clone(), entityStore);
+      ParticleUtil.spawnParticleEffect(PARTICLE_ENTRY, to.clone(), entityStore);
     }
+
     SoundUtil.playSoundEvent3d(
-      SoundEvent.getAssetMap().getIndex("SFX_Skeleton_Mage_Spellbook_Charge"),
+      SoundEvent.getAssetMap().getIndex(SOUND_CHARGE),
       SoundCategory.SFX,
       from.getX(), from.getY(), from.getZ(),
       3, 0.5f,
       entityStore
     );
+  }
+
+  private void spawnDestinationParticle(Vector3d position) {
+    SpatialResource<Ref<EntityStore>, EntityStore> playerSpatialResource = (SpatialResource) entityStore.getResource(EntityModule.get().getPlayerSpatialResourceType());
+    List<Ref<EntityStore>> playerRefs = new ArrayList<>();
+    playerSpatialResource.getSpatialStructure().collect(position, 75.0, playerRefs);
+
+    if (!playerRefs.contains(entityRef)) {
+      playerRefs.add(entityRef);
+    }
+    ParticleUtil.spawnParticleEffect(PARTICLE_ARRIVAL, position, playerRefs, entityStore);
+  }
+
+  private double calculateDistance(Vector3d from, Vector3d to) {
+    if (from == null || to == null) return Double.MAX_VALUE;
+    return Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2) + Math.pow(from.z - to.z, 2));
   }
 
   public void cancel() {
@@ -203,5 +240,4 @@ public class WarpPageTeleportation {
   public Vector3d getStartPosition() {
     return startPosition;
   }
-
 }
