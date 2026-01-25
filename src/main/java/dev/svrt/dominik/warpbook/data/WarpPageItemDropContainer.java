@@ -5,6 +5,7 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.validation.Validators;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemDrop;
 import com.hypixel.hytale.server.core.asset.type.item.config.container.ItemDropContainer;
+import org.bson.BsonDocument;
 
 import java.util.List;
 import java.util.Set;
@@ -15,21 +16,27 @@ public class WarpPageItemDropContainer extends ItemDropContainer {
 
   public static final BuilderCodec<WarpPageItemDropContainer> CODEC;
 
-  public WarpPageItemDropContainer(@Nonnull ItemDrop drop, double chance) {
+  public WarpPageItemDropContainer(double chance) {
     super(chance);
   }
 
-  protected WarpPageItemDropContainer() {
+  public WarpPageItemDropContainer() {
+
   }
 
   protected void populateDrops(@Nonnull List<ItemDrop> drops, DoubleSupplier chanceProvider, Set<String> droplistReferences) {
-//    drops.add(this.drop);
+    drops.add(new ItemDrop("Bound_Warp_Page", createRandomWarpPage(), 1, 1));
   }
 
   @Nonnull
   public List<ItemDrop> getAllDrops(@Nonnull List<ItemDrop> list) {
-//    list.add(this.drop);
+    list.add(new ItemDrop("Bound_Warp_Page", createRandomWarpPage(), 1, 1));
     return list;
+  }
+
+  private BsonDocument createRandomWarpPage() {
+    BsonDocument doc = new BsonDocument();
+    return doc;
   }
 
   @Nonnull
