@@ -1,6 +1,8 @@
 package dev.svrt.dominik.warpbook;
 
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.asset.type.item.config.container.DroplistItemDropContainer;
+import com.hypixel.hytale.server.core.asset.type.item.config.container.ItemDropContainer;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
@@ -8,6 +10,7 @@ import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.plugin.registry.CodecMapRegistry;
 import com.hypixel.hytale.server.core.util.Config;
 import dev.svrt.dominik.warpbook.config.WarpBookConfig;
+import dev.svrt.dominik.warpbook.data.WarpPageItemDropContainer;
 import dev.svrt.dominik.warpbook.interactions.OpenWarpBookInteraction;
 import dev.svrt.dominik.warpbook.interactions.TeleportWarpPageInteraction;
 import dev.svrt.dominik.warpbook.services.*;
@@ -54,6 +57,8 @@ public class WarpBookMod extends JavaPlugin {
 
         getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register("Warp_Book_UI", WarpBookUISupplier.class, WarpBookUISupplier.CODEC);
         getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register("Bind_Warp_Page_UI", BindWarpPageUISupplier.class, BindWarpPageUISupplier.CODEC);
+
+        getCodecRegistry(ItemDropContainer.CODEC).register("Warp_Page", WarpPageItemDropContainer.class, WarpPageItemDropContainer.CODEC);
 
         getEntityStoreRegistry().registerSystem(new TeleportCancelSystem());
 
