@@ -75,7 +75,7 @@
                     "Type": "Simple",
                     "RunTime": 0.5,
                     "Next": {
-                      "Type": "Teleporter",
+                      "Type": "WarpBookTeleporterInteraction",
                       "Particle": "Teleport"
                     }
                   }
@@ -84,6 +84,9 @@
             },
             "Use": {
               "Interactions": [
+                {
+                  "Type": "SetTeleporterDestination"
+                },
                 {
                   "Type": "OpenCustomUI",
                   "Page": {

@@ -6,10 +6,15 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.ser
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.plugin.registry.CodecMapRegistry;
+import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.Config;
+import dev.svrt.dominik.warpbook.components.Teleporter;
 import dev.svrt.dominik.warpbook.config.WarpBookConfig;
 import dev.svrt.dominik.warpbook.interactions.OpenWarpBookInteraction;
+import dev.svrt.dominik.warpbook.interactions.SetTeleporterDestinationInteraction;
 import dev.svrt.dominik.warpbook.interactions.TeleportWarpPageInteraction;
+import dev.svrt.dominik.warpbook.interactions.WarpBookTeleporterInteraction;
 import dev.svrt.dominik.warpbook.services.*;
 import dev.svrt.dominik.warpbook.systems.TeleportCancelSystem;
 import dev.svrt.dominik.warpbook.ui.BindWarpPageUISupplier;
@@ -21,6 +26,7 @@ import java.util.logging.Level;
 public class WarpBookMod extends JavaPlugin {
 
     public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    public static ComponentType<ChunkStore, Teleporter> TELEPORTER_COMPONENT_TYPE;
 
     private static WarpBookMod instance;
 
@@ -48,9 +54,13 @@ public class WarpBookMod extends JavaPlugin {
         this.teleportationService = new TeleportationService();
         this.paymentService = new PaymentService();
 
+        TELEPORTER_COMPONENT_TYPE = getChunkStoreRegistry().registerComponent(Teleporter.class, "WarpBookTeleporter", Teleporter.CODEC);
+
         CodecMapRegistry.Assets<Interaction, ?> interactionRegistry = getCodecRegistry(Interaction.CODEC);
         interactionRegistry.register("TeleportWarpPageInteraction", TeleportWarpPageInteraction.class, TeleportWarpPageInteraction.CODEC);
         interactionRegistry.register("OpenWarpBookInteraction", OpenWarpBookInteraction.class, OpenWarpBookInteraction.CODEC);
+        interactionRegistry.register("WarpBookTeleporterInteraction", WarpBookTeleporterInteraction.class, WarpBookTeleporterInteraction.CODEC);
+        interactionRegistry.register("SetTeleporterDestination", SetTeleporterDestinationInteraction.class, SetTeleporterDestinationInteraction.CODEC);
 
         getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register("Warp_Book_UI", WarpBookUISupplier.class, WarpBookUISupplier.CODEC);
         getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register("Bind_Warp_Page_UI", BindWarpPageUISupplier.class, BindWarpPageUISupplier.CODEC);
