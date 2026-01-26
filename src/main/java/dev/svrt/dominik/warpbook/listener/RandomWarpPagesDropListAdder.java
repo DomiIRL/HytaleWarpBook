@@ -27,7 +27,7 @@ public class RandomWarpPagesDropListAdder {
 
     ItemStack boundWarpPage = new ItemStack("Warp_Page_Bound", 1).withMetadata(WarpPageBinding.KEYED_CODEC, binding);
     ItemDrop warpPageBound = new ItemDrop("Warp_Page_Bound", boundWarpPage.getMetadata(), 1, 1);
-    SingleItemDropContainer itemDropContainer = new SingleItemDropContainer(warpPageBound, 1);
+    SingleItemDropContainer itemDropContainer = new SingleItemDropContainer(warpPageBound, 5);
 
     for (Map.Entry<String, ItemDropList> entry : map.entrySet()) {
       String list = entry.getKey();
