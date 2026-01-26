@@ -4,7 +4,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -30,8 +29,8 @@ public class WarpPageUsageService {
       return false;
     }
 
-    TeleportationService teleportationService = WarpBookMod.getInstance().getTeleportationService();
-    teleportationService.processRandomDestination(player, positionBinding).thenAccept(newBinding -> {
+    RandomDestinationService randomDestinationService = WarpBookMod.getInstance().getRandomDestinationService();
+    randomDestinationService.processRandomDestination(player, positionBinding).thenAccept(newBinding -> {
       WarpPageBinding finalBinding = positionBinding;
       if (newBinding != null) {
         finalBinding = newBinding;

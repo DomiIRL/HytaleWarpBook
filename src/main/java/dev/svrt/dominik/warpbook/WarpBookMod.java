@@ -36,6 +36,7 @@ public class WarpBookMod extends JavaPlugin {
     private WarpPageUsageService warpPageUsageService;
     private WarpBookService warpBookService;
     private TeleportationService teleportationService;
+    private RandomDestinationService randomDestinationService;
     private PaymentService paymentService;
 
     public WarpBookMod(@Nonnull JavaPluginInit init) {
@@ -51,6 +52,7 @@ public class WarpBookMod extends JavaPlugin {
         this.warpPageBindingService = new WarpPageBindingService();
         this.warpPageUsageService = new WarpPageUsageService();
         this.warpBookService = new WarpBookService();
+        this.randomDestinationService = new RandomDestinationService();
         this.teleportationService = new TeleportationService();
         this.paymentService = new PaymentService();
 
@@ -93,6 +95,10 @@ public class WarpBookMod extends JavaPlugin {
 
     public TeleportationService getTeleportationService() {
         return teleportationService;
+    }
+
+    public RandomDestinationService getRandomDestinationService() {
+        return randomDestinationService;
     }
 
     public PaymentService getPaymentService() {
