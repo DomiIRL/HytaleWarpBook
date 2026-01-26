@@ -71,7 +71,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
 
             commands.append("#WarpList", "WarpPage.ui");
 
-            String warpName = pageBinding.name != null ? pageBinding.name : String.format("Warp %d", uiIndex + 1);
+            String warpName = pageBinding.name != null ? pageBinding.name : "Ancient Destination";
             Transform transform = pageBinding.transform;
 
             String position = "Unknown";

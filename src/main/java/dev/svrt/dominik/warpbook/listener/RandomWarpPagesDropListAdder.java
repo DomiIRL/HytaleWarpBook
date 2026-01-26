@@ -19,7 +19,6 @@ import static dev.svrt.dominik.warpbook.WarpBookMod.LOGGER;
 public class RandomWarpPagesDropListAdder {
 
     private static final String ITEM_ID = "Warp_Page_Bound";
-    private static final String WARP_NAME = "Ancient Destination";
     private static final String TARGET_LIST_PREFIX = "Zone";
 
     public static void onBoot(BootEvent ignored) {
@@ -38,7 +37,6 @@ public class RandomWarpPagesDropListAdder {
     private static ItemDropContainer createWarpPageContainer() {
         WarpPageBinding binding = new WarpPageBinding();
         binding.random = true;
-        binding.name = WARP_NAME;
 
         ItemStack boundWarpPage = new ItemStack(ITEM_ID, 1).withMetadata(WarpPageBinding.KEYED_CODEC, binding);
         ItemDrop warpPageBound = new ItemDrop(ITEM_ID, boundWarpPage.getMetadata(), 1, 1);

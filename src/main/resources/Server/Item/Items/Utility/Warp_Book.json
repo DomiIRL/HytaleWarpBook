@@ -4,7 +4,7 @@
     "Description": "server.items.Warp_Book.description"
   },
   "Icon": "Icons/ItemsGenerated/Warp_Book.png",
-  "Quality": "Rare",
+  "Quality": "Epic",
   "MaxStack": 1,
   "ItemLevel": 40,
   "Model": "Items/Utility/Warp_Book/Warp_Book.blockymodel",

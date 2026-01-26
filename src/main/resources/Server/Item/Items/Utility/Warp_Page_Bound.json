@@ -3,7 +3,7 @@
     "Name": "server.items.Warp_Page_Bound.name",
     "Description": "server.items.Warp_Page_Bound.description"
   },
-  "Quality": "Uncommon",
+  "Quality": "Rare",
   "MaxStack": 1,
   "ItemLevel": 30,
   "PlayerAnimationsId": "Item",

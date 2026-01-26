@@ -47,12 +47,7 @@ public class RandomDestinationService {
             LOGGER.at(Level.WARNING).log("Failed to get UUID component for random destination!");
             return CompletableFuture.completedFuture(null);
         }
-
         UUID playerUUID = uuidComponent.getUuid();
-        if (hasActiveProcess(playerUUID)) {
-            player.sendMessage(Message.raw("A random destination is already being calculated!"));
-            return CompletableFuture.completedFuture(null);
-        }
 
         World world = player.getWorld();
         if (world == null) {
@@ -125,75 +120,51 @@ public class RandomDestinationService {
                 try {
                     if (resultFuture.isDone()) return;
 
-                    // Try multiple positions within the same loaded chunk
-                    for (int attempt = 0; attempt < 5; attempt++) {
-                        if (resultFuture.isDone()) break;
+                    int localX = ChunkUtil.localCoordinate(initialDestX);
+                    int localZ = ChunkUtil.localCoordinate(initialDestZ);
+                    int maxY = chunk.getHeight(localX, localZ);
 
-                        int destX, destZ;
-                        if (attempt == 0) {
-                            destX = initialDestX;
-                            destZ = initialDestZ;
-                        } else {
-                            // Pick a new random position within the same chunk (0-31)
-                            int chunkX = ChunkUtil.chunkCoordinate(initialDestX);
-                            int chunkZ = ChunkUtil.chunkCoordinate(initialDestZ);
-                            int localX = (int) (Math.random() * ChunkUtil.SIZE);
-                            int localZ = (int) (Math.random() * ChunkUtil.SIZE);
-                            destX = ChunkUtil.worldCoordFromLocalCoord(chunkX, localX);
-                            destZ = ChunkUtil.worldCoordFromLocalCoord(chunkZ, localZ);
+                    int fluidAtMax = world.getFluidId(initialDestX, maxY, initialDestZ);
+                    int fluidAbove = world.getFluidId(initialDestX, maxY + 1, initialDestZ);
+
+                    // Check for water (either at height or directly above ground)
+                    if (fluidAtMax != 0 || fluidAbove != 0) {
+                        // Water Logic: Find top of water
+                        int waterY = fluidAtMax != 0 ? maxY : maxY + 1;
+                        while (waterY < 255) {
+                            if (world.getFluidId(initialDestX, waterY + 1, initialDestZ) == 0) break;
+                            waterY++;
                         }
 
-                        int localX = ChunkUtil.localCoordinate(destX);
-                        int localZ = ChunkUtil.localCoordinate(destZ);
-                        int maxY = chunk.getHeight(localX, localZ);
+                        int waterDepth = waterY - maxY;
 
-                        int fluidAtMax = world.getFluidId(destX, maxY, destZ);
-                        int fluidAbove = world.getFluidId(destX, maxY + 1, destZ);
-
-                        // Check for water (either at height or directly above ground)
-                        if (fluidAtMax != 0 || fluidAbove != 0) {
-                            // Water Logic: Find top of water
-                            int waterY = fluidAtMax != 0 ? maxY : maxY + 1;
-                            while (waterY < 255) {
-                                if (world.getFluidId(destX, waterY + 1, destZ) == 0) break;
-                                waterY++;
-                            }
-
-                            int waterDepth = waterY - maxY;
-
-                            // If water is deeper than 10 blocks, skip this position and try another one
-                            if (waterDepth > 10) {
-                                continue;
-                            }
-
+                        // If water is deeper than 5 blocks, skip this position
+                        if (waterDepth <= 5) {
                             // Check headspace above water (shallow water is acceptable)
-                            if (isHeadSpaceClear(world, destX, waterY, destZ)) {
-                                // "Don't add 1 block on y there so the player stands halfway in the water"
-                                binding.transform = new Transform(new Vector3d(destX + 0.5, waterY + 0.5, destZ + 0.5));
+                            if (isHeadSpaceClear(world, initialDestX, waterY, initialDestZ)) {
+                                binding.transform = new Transform(new Vector3d(initialDestX + 0.5, waterY + 0.5, initialDestZ + 0.5));
                                 resultFuture.complete(binding);
-                                return;
                             }
-                        } else {
-                            // Ground Logic: Scan downwards for valid spot (handling trees)
-                            Integer bestY = null;
-                            // Scan down 15 blocks to find ground below trees
-                            for (int y = maxY; y >= Math.max(0, maxY - 15); y--) {
-                                int block = world.getBlock(destX, y, destZ);
-                                int fluid = world.getFluidId(destX, y, destZ);
+                        }
+                    } else {
+                        // Ground Logic: Scan downwards for valid spot (handling trees)
+                        Integer bestY = null;
+                        // Scan down 15 blocks to find ground below trees
+                        for (int y = maxY; y >= Math.max(0, maxY - 15); y--) {
+                            int block = world.getBlock(initialDestX, y, initialDestZ);
+                            int fluid = world.getFluidId(initialDestX, y, initialDestZ);
 
-                                if (block != 0 && fluid == 0) {
-                                    if (isHeadSpaceClear(world, destX, y, destZ)) {
-                                        bestY = y;
-                                        // Continue scanning to find the LOWEST valid spot
-                                    }
+                            if (block != 0 && fluid == 0) {
+                                if (isHeadSpaceClear(world, initialDestX, y, initialDestZ)) {
+                                    bestY = y;
+                                    // Continue scanning to find the LOWEST valid spot
                                 }
                             }
+                        }
 
-                            if (bestY != null) {
-                                binding.transform = new Transform(new Vector3d(destX + 0.5, bestY + 1.0, destZ + 0.5));
-                                resultFuture.complete(binding);
-                                return;
-                            }
+                        if (bestY != null) {
+                            binding.transform = new Transform(new Vector3d(initialDestX + 0.5, bestY + 1.0, initialDestZ + 0.5));
+                            resultFuture.complete(binding);
                         }
                     }
                 } finally {
