@@ -41,7 +41,7 @@
           "Max": 0
         },
         "Opacity": 0,
-        "Color": "#d9fdff",
+        "Color": "#000000",
         "Scale": {
           "X": {
             "Min": 1,
@@ -58,7 +58,7 @@
       },
       "100": {
         "Opacity": 0.0,
-        "Color": "#4ee4ff"
+        "Color": "#9726f5"
       },
       "80": {
         "Opacity": 1.0
@@ -76,7 +76,7 @@
         }
       },
       "Opacity": 1,
-      "Color": "#d9fdff",
+      "Color": "#000000",
       "FrameIndex": {
         "Min": 0,
         "Max": 0

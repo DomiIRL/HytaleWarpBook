@@ -43,7 +43,7 @@
     "UVOption": "RandomFlipU",
     "Animation": {
       "0": {
-        "Color": "#ecfaff",
+        "Color": "#000000",
         "Scale": {
           "X": {
             "Min": 0.0,
@@ -56,7 +56,7 @@
         }
       },
       "20": {
-        "Color": "#6fceff",
+        "Color": "#9726f5",
         "Scale": {
           "X": {
             "Min": 1.0,
@@ -70,7 +70,7 @@
       },
       "80": {},
       "100": {
-        "Color": "#6851ff",
+        "Color": "#5a1a8a",
         "Scale": {
           "X": {
             "Min": 0.0,
@@ -95,7 +95,7 @@
         }
       },
       "Opacity": 1.0,
-      "Color": "#ffffff"
+      "Color": "#000000"
     }
   },
   "LinearFiltering": true,

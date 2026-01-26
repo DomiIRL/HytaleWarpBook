@@ -1,10 +1,6 @@
 package dev.svrt.dominik.warpbook;
 
-import com.hypixel.hytale.assetstore.event.LoadedAssetsEvent;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.server.core.asset.type.item.config.ItemDropList;
-import com.hypixel.hytale.server.core.asset.type.item.config.container.ItemDropContainer;
-import com.hypixel.hytale.server.core.asset.type.item.config.container.MultipleItemDropContainer;
 import com.hypixel.hytale.server.core.event.events.BootEvent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
@@ -16,20 +12,15 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.Config;
 import dev.svrt.dominik.warpbook.components.Teleporter;
 import dev.svrt.dominik.warpbook.config.WarpBookConfig;
-import dev.svrt.dominik.warpbook.data.WarpPageItemDropContainer;
 import dev.svrt.dominik.warpbook.interactions.OpenWarpBookInteraction;
 import dev.svrt.dominik.warpbook.interactions.TeleportWarpPageInteraction;
-import dev.svrt.dominik.warpbook.listener.LoadedAssetsListener;
+import dev.svrt.dominik.warpbook.listener.RandomWarpPagesDropListAdder;
 import dev.svrt.dominik.warpbook.services.*;
 import dev.svrt.dominik.warpbook.systems.TeleportCancelSystem;
 import dev.svrt.dominik.warpbook.ui.BindWarpPageUISupplier;
 import dev.svrt.dominik.warpbook.ui.WarpBookUISupplier;
 
 import javax.annotation.Nonnull;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
 public class WarpBookMod extends JavaPlugin {
@@ -72,11 +63,9 @@ public class WarpBookMod extends JavaPlugin {
         getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register("Warp_Book_UI", WarpBookUISupplier.class, WarpBookUISupplier.CODEC);
         getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register("Bind_Warp_Page_UI", BindWarpPageUISupplier.class, BindWarpPageUISupplier.CODEC);
 
-        getCodecRegistry(ItemDropContainer.CODEC).register("Warp_Page", WarpPageItemDropContainer.class, WarpPageItemDropContainer.CODEC);
-
         getEntityStoreRegistry().registerSystem(new TeleportCancelSystem());
 
-        getEventRegistry().registerGlobal(BootEvent.class, LoadedAssetsListener::onLoadedAssets);
+        getEventRegistry().registerGlobal(BootEvent.class, RandomWarpPagesDropListAdder::onBoot);
 
         LOGGER.at(Level.INFO).log("Warp Book plugin loaded!");
     }

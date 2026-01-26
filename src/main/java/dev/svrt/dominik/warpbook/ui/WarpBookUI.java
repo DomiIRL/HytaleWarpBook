@@ -73,7 +73,12 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
 
             String warpName = pageBinding.name != null ? pageBinding.name : String.format("Warp %d", uiIndex + 1);
             Transform transform = pageBinding.transform;
-            String position = String.format("X: %.1f, Y: %.1f, Z: %.1f (%s)", transform.getPosition().x, transform.getPosition().y, transform.getPosition().z, pageBinding.world);
+
+            String position = "Unknown";
+            if (!pageBinding.random) {
+                position = String.format("X: %.1f, Y: %.1f, Z: %.1f (%s)",
+                  transform.getPosition().x, transform.getPosition().y, transform.getPosition().z, pageBinding.world);
+            }
 
             commands.set(selector + " #Name.Text", warpName);
             commands.set(selector + " #Position.Text", position);
@@ -96,7 +101,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
 
         if (data.slot != null) {
             try {
-                int slotIndex = Integer.parseInt(data.slot);
+                short slotIndex = Short.parseShort(data.slot);
                 teleportToWarp(ref, store, slotIndex);
             } catch (NumberFormatException e) {
                 playerRef.sendMessage(Message.raw("Invalid slot number!"));
@@ -104,8 +109,8 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
         }
     }
 
-    private void teleportToWarp(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, int slot) {
-        ItemStack warpPage = container.getItemStack((short) slot);
+    private void teleportToWarp(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, short slot) {
+        ItemStack warpPage = container.getItemStack(slot);
 
         if (warpPage == null || warpPage.isEmpty() || !warpPage.getItemId().equals("Warp_Page_Bound")) {
             playerRef.sendMessage(Message.raw("Invalid warp page itemstack!"));
@@ -114,7 +119,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
         }
 
         WarpPageUsageService usageService = WarpBookMod.getInstance().getWarpPageUsageService();
-        boolean success = usageService.startTeleportPlayer(ref, store, warpPage);
+        boolean success = usageService.startTeleportPlayer(ref, store, warpPage, container, slot);
         if (success) {
             close();
         } else {
