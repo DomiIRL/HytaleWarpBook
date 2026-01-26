@@ -82,7 +82,7 @@ public class RandomDestinationService {
         activeProcesses.put(playerUUID, process);
 
         // Clean up from tracking map when complete
-        process.whenComplete((result, throwable) -> activeProcesses.remove(playerUUID));
+        process.whenComplete((r, t) -> activeProcesses.remove(playerUUID));
 
         return process;
     }
@@ -105,7 +105,7 @@ public class RandomDestinationService {
                 }
             });
 
-        // Return immediately - will complete as soon as first success is found via resultFuture.complete() in tryFindParams
+        // Will complete as soon as first success is found via resultFuture.complete() in tryFindParams
         return resultFuture;
     }
 
@@ -159,7 +159,14 @@ public class RandomDestinationService {
                                 waterY++;
                             }
 
-                            // Check headspace above water
+                            int waterDepth = waterY - maxY;
+
+                            // If water is deeper than 10 blocks, skip this position and try another one
+                            if (waterDepth > 10) {
+                                continue;
+                            }
+
+                            // Check headspace above water (shallow water is acceptable)
                             if (isHeadSpaceClear(world, destX, waterY, destZ)) {
                                 // "Don't add 1 block on y there so the player stands halfway in the water"
                                 binding.transform = new Transform(new Vector3d(destX + 0.5, waterY + 0.5, destZ + 0.5));
