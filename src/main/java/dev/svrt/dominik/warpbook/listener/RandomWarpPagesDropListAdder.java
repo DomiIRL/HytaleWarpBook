@@ -18,45 +18,57 @@ import static dev.svrt.dominik.warpbook.WarpBookMod.LOGGER;
 
 public class RandomWarpPagesDropListAdder {
 
-  public static void onBoot(BootEvent event) {
-    Map<String, ItemDropList> map = ItemDropList.getAssetMap().getAssetMap();
+    private static final String ITEM_ID = "Warp_Page_Bound";
+    private static final String WARP_NAME = "Ancient Destination";
+    private static final String TARGET_LIST_PREFIX = "Zone";
 
-    WarpPageBinding binding = new WarpPageBinding();
-    binding.random = true;
-    binding.name = "Ancient Destination";
+    public static void onBoot(BootEvent ignored) {
+        Map<String, ItemDropList> map = ItemDropList.getAssetMap().getAssetMap();
+        ItemDropContainer warpPageContainer = createWarpPageContainer();
 
-    ItemStack boundWarpPage = new ItemStack("Warp_Page_Bound", 1).withMetadata(WarpPageBinding.KEYED_CODEC, binding);
-    ItemDrop warpPageBound = new ItemDrop("Warp_Page_Bound", boundWarpPage.getMetadata(), 1, 1);
-    SingleItemDropContainer itemDropContainer = new SingleItemDropContainer(warpPageBound, 5);
+        for (Map.Entry<String, ItemDropList> entry : map.entrySet()) {
+            if (!entry.getKey().startsWith(TARGET_LIST_PREFIX)) {
+                continue;
+            }
 
-    for (Map.Entry<String, ItemDropList> entry : map.entrySet()) {
-      String list = entry.getKey();
-      if (!list.startsWith("Zone")) {
-        continue;
-      }
-      ItemDropList value = map.get(list);
-      if (value == null) {
-        LOGGER.atSevere().log("Could not find prefab drop list: " + list);
-        continue;
-      }
-      try {
-        Class<ItemDropList> dropListClass = ItemDropList.class;
-        Field containerField = dropListClass.getDeclaredField("container");
-        containerField.setAccessible(true);
-        ItemDropContainer o = (ItemDropContainer) containerField.get(value);
-        if (o instanceof MultipleItemDropContainer multiContainer) {
-          Class<MultipleItemDropContainer> multiClass = MultipleItemDropContainer.class;
-          Field containersField = multiClass.getDeclaredField("containers");
-          containersField.setAccessible(true);
-          ItemDropContainer[] containers = (ItemDropContainer[]) containersField.get(multiContainer);
-          List<ItemDropContainer> containersList = new ArrayList<>(List.of(containers));
-          containersList.add(itemDropContainer);
-          containersField.set(multiContainer, containersList.toArray(new ItemDropContainer[0]));
-          LOGGER.atInfo().log("Added Warpbook Loot entry to: " + value.getId());
+            injectWarpPage(entry.getValue(), warpPageContainer);
         }
-      } catch (Exception e) {
-        LOGGER.atSevere().withCause(e).log("Something went wrong while adding custom drop list entry");
-      }
     }
-  }
+
+    private static ItemDropContainer createWarpPageContainer() {
+        WarpPageBinding binding = new WarpPageBinding();
+        binding.random = true;
+        binding.name = WARP_NAME;
+
+        ItemStack boundWarpPage = new ItemStack(ITEM_ID, 1).withMetadata(WarpPageBinding.KEYED_CODEC, binding);
+        ItemDrop warpPageBound = new ItemDrop(ITEM_ID, boundWarpPage.getMetadata(), 1, 1);
+
+        return new SingleItemDropContainer(warpPageBound, 5);
+    }
+
+    private static void injectWarpPage(ItemDropList dropList, ItemDropContainer warpPageContainer) {
+        try {
+            Field containerField = ItemDropList.class.getDeclaredField("container");
+            containerField.setAccessible(true);
+            ItemDropContainer container = (ItemDropContainer) containerField.get(dropList);
+
+            if (container instanceof MultipleItemDropContainer multiContainer) {
+                addItemToMultiContainer(multiContainer, warpPageContainer);
+                LOGGER.atInfo().log("Added Warpbook Loot entry to: " + dropList.getId());
+            }
+        } catch (Exception e) {
+            LOGGER.atSevere().withCause(e).log("Something went wrong while adding custom drop list entry to " + dropList.getId());
+        }
+    }
+
+    private static void addItemToMultiContainer(MultipleItemDropContainer multiContainer, ItemDropContainer newItem) throws NoSuchFieldException, IllegalAccessException {
+        Field containersField = MultipleItemDropContainer.class.getDeclaredField("containers");
+        containersField.setAccessible(true);
+
+        ItemDropContainer[] existingContainers = (ItemDropContainer[]) containersField.get(multiContainer);
+        List<ItemDropContainer> containersList = new ArrayList<>(List.of(existingContainers));
+        containersList.add(newItem);
+
+        containersField.set(multiContainer, containersList.toArray(new ItemDropContainer[0]));
+    }
 }
