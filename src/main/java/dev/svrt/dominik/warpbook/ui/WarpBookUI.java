@@ -76,8 +76,8 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
 
             String position = "Unknown";
             if (!pageBinding.random) {
-                position = String.format("X: %.1f, Y: %.1f, Z: %.1f (%s)",
-                  transform.getPosition().x, transform.getPosition().y, transform.getPosition().z, pageBinding.world);
+                position = String.format("X: %.1f, Y: %.1f, Z: %.1f",
+                  transform.getPosition().x, transform.getPosition().y, transform.getPosition().z);
             }
 
             commands.set(selector + " #Name.Text", warpName);
