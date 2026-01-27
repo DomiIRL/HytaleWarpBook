@@ -8,7 +8,7 @@ $C.@Container {
   #Title {
     Group {
       $C.@Title {
-        @Text = %server.customUI.warpPage.title;
+        @Text = %awb.customUI.warpPage.title;
       }
 
     }
@@ -22,7 +22,7 @@ $C.@Container {
         FlexWeight: 1;
 
         Label {
-            Text: %server.customUI.warpPage.enterName;
+            Text: %awb.customUI.warpPage.enterName;
             Style: (FontSize: 16, TextColor: #ffffff);
         }
     }

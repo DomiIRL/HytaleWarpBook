@@ -8,7 +8,7 @@ $C.@Container {
   #Title {
     Group {
       $C.@Title {
-        @Text = %server.customUI.warpBook.title;
+        @Text = %awb.customUI.warpBook.title;
       }
 
 //      $C.@HeaderSearch {}

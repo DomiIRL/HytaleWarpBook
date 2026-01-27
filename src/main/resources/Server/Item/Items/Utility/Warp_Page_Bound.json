@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Warp_Page_Bound.name",
-    "Description": "server.items.Warp_Page_Bound.description"
+    "Name": "awb.items.Warp_Page_Bound.name",
+    "Description": "awb.items.Warp_Page_Bound.description"
   },
   "Quality": "Rare",
   "MaxStack": 1,
@@ -32,7 +32,7 @@
     }
   },
   "UsePlayerAnimations": false,
-  "Icon": "Icons/ItemsGenerated/Warp_Page_Bound.png",
+  "Icon": "Icons/ItemsGenerated/AWB_Warp_Page_Bound.png",
   "Tags": {
     "Type": [
       "Tool"

@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Warp_Book.name",
-    "Description": "server.items.Warp_Book.description"
+    "Name": "awb.items.Warp_Book.name",
+    "Description": "awb.items.Warp_Book.description"
   },
   "Icon": "Icons/ItemsGenerated/AWB_Warp_Book.png",
   "Quality": "Epic",

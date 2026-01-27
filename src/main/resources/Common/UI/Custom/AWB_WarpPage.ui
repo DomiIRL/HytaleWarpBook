@@ -21,7 +21,7 @@ Group #WarpPage {
   }
 
   $C.@TextButton #TeleportButton {
-    @Text = %server.customUI.warpBook.teleport;
+    @Text = %awb.customUI.warpBook.teleport;
     Anchor: (Width: 150, Height: 40, Right: 5, Vertical: 1);
   }
 }

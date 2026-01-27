@@ -36,8 +36,8 @@ import static dev.svrt.dominik.warpbook.WarpBookMod.LOGGER;
 
 public class WarpPageTeleportation {
 
-  private static final String PARTICLE_ENTRY = "Warp_Portal_Entry";
-  private static final String PARTICLE_ARRIVAL = "Warp_Portal_Arrival";
+  private static final String PARTICLE_ENTRY = "AWB_Warp_Entry";
+  private static final String PARTICLE_ARRIVAL = "AWB_Warp_Arrival";
   private static final String SOUND_OPEN = "SFX_Portal_Neutral_Open";
   private static final String SOUND_CHARGE = "SFX_Skeleton_Mage_Spellbook_Charge";
   private static final double PARTICLE_DISTANCE_THRESHOLD = 100.0;
