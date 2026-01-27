@@ -1,7 +1,7 @@
 {
   "Spawners": [
     {
-      "SpawnerId": "Warp_Portal_Square_Frame1",
+      "SpawnerId": "AWB_Warp_Portal_Square_Frame1",
       "PositionOffset": {
         "Y": 2.7,
         "Z": 0,
@@ -9,7 +9,7 @@
       }
     },
     {
-      "SpawnerId": "Warp_Portal_Square_Frame2",
+      "SpawnerId": "AWB_Warp_Portal_Square_Frame2",
       "PositionOffset": {
         "Y": 2.55,
         "X": 0.0
@@ -17,7 +17,7 @@
       "FixedRotation": false
     },
     {
-      "SpawnerId": "Warp_Portal_Square_Purple_FrameSparks",
+      "SpawnerId": "AWB_Warp_Portal_Square_Purple_FrameSparks",
       "PositionOffset": {
         "Y": 2.5,
         "X": 0.0
@@ -25,7 +25,7 @@
       "StartDelay": 0.1
     },
     {
-      "SpawnerId": "Warp_Portal_Square_Purple_Background",
+      "SpawnerId": "AWB_Warp_Portal_Square_Purple_Background",
       "PositionOffset": {
         "Y": 2.5,
         "Z": 0,
@@ -33,7 +33,7 @@
       }
     },
     {
-      "SpawnerId": "Warp_Portal_Square_Purple_Distortion",
+      "SpawnerId": "AWB_Warp_Portal_Square_Purple_Distortion",
       "PositionOffset": {
         "Y": 2.5,
         "Z": 0,
@@ -42,7 +42,7 @@
       "StartDelay": 0.5
     },
     {
-      "SpawnerId": "Warp_Portal_Square_Frame_Perm",
+      "SpawnerId": "AWB_Warp_Portal_Square_Frame_Perm",
       "PositionOffset": {
         "Y": 2.42,
         "Z": 0,
@@ -50,7 +50,7 @@
       }
     },
     {
-      "SpawnerId": "Warp_Portal_Square_Frame_PermGlow",
+      "SpawnerId": "AWB_Warp_Portal_Square_Frame_PermGlow",
       "PositionOffset": {
         "X": 0.0,
         "Y": 2.45,

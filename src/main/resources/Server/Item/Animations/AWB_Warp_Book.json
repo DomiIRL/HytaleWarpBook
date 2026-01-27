@@ -1,0 +1,130 @@
+{
+  "Parent": "Item",
+  "Animations": {
+    "Idle": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "FirstPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle_FPS.blockyanim",
+      "Speed": 1,
+      "Looping": true
+    },
+    "Walk": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "FirstPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle_FPS.blockyanim",
+      "Speed": 1,
+      "Looping": true
+    },
+    "WalkBackward": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "FirstPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle_FPS.blockyanim",
+      "Speed": 1,
+      "Looping": true
+    },
+    "Run": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "FirstPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle_FPS.blockyanim",
+      "Speed": 1,
+      "Looping": true
+    },
+    "RunBackward": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "FirstPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle_FPS.blockyanim",
+      "Speed": 1,
+      "Looping": true
+    },
+    "Sprint": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "FirstPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle_FPS.blockyanim",
+      "Speed": 1,
+      "Looping": true
+    },
+    "Crouch": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "FirstPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle_FPS.blockyanim",
+      "Speed": 1,
+      "Looping": true,
+      "BlendingDuration": 0.1
+    },
+    "CrouchWalk": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "FirstPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle_FPS.blockyanim",
+      "Speed": 1,
+      "Looping": true,
+      "BlendingDuration": 0.1
+    },
+    "CrouchWalkBackward": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "FirstPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle_FPS.blockyanim",
+      "Speed": 1,
+      "Looping": true,
+      "BlendingDuration": 0.1
+    },
+    "Jump": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "KeepPreviousFirstPersonAnimation": true
+    },
+    "JumpWalk": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "KeepPreviousFirstPersonAnimation": true
+    },
+    "JumpRun": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "Speed": 1,
+      "Looping": false,
+      "KeepPreviousFirstPersonAnimation": true
+    },
+    "Fall": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "Speed": 1,
+      "Looping": true,
+      "BlendingDuration": 0.4,
+      "KeepPreviousFirstPersonAnimation": true
+    },
+    "FallFar": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "Speed": 1,
+      "Looping": true,
+      "BlendingDuration": 0.4,
+      "KeepPreviousFirstPersonAnimation": true
+    },
+    "Fly": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "FirstPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle_FPS.blockyanim",
+      "Speed": 1,
+      "Looping": true
+    },
+    "FlyFast": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "FirstPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle_FPS.blockyanim",
+      "Speed": 1,
+      "Looping": true
+    },
+    "FlyBackward": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "FirstPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle_FPS.blockyanim",
+      "Speed": 1,
+      "Looping": true
+    },
+    "FlyIdle": {
+      "ThirdPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle.blockyanim",
+      "FirstPerson": "Characters/Animations/Items/Main_Handed/Warp_Book/AWB_Warp_Book_Idle_FPS.blockyanim",
+      "Speed": 1,
+      "Looping": true
+    }
+  },
+  "WiggleWeights": {
+    "Pitch": 3,
+    "PitchDeceleration": 0.1,
+    "Roll": 0.1,
+    "RollDeceleration": 0.1,
+    "X": 3,
+    "XDeceleration": 0.1,
+    "Y": 0.1,
+    "YDeceleration": 0.1,
+    "Z": 0.1,
+    "ZDeceleration": 0.1
+  }
+}

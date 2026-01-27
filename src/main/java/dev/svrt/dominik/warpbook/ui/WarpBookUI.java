@@ -45,7 +45,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
     @Override
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commands,
                       @Nonnull UIEventBuilder events, @Nonnull Store<EntityStore> store) {
-        commands.append("WarpBook.ui");
+        commands.append("AWB_WarpBook.ui");
 
         commands.clear("#WarpList");
 
@@ -69,7 +69,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
 
             String selector = "#WarpList[" + uiIndex + "]";
 
-            commands.append("#WarpList", "WarpPage.ui");
+            commands.append("#WarpList", "AWB_WarpPage.ui");
 
             String warpName = pageBinding.name != null ? pageBinding.name : "Ancient Destination";
             Transform transform = pageBinding.transform;

@@ -42,7 +42,7 @@
           "AmbientSoundEventId": "SFX_Portal_Neutral",
           "Particles": [
             {
-              "SystemId": "Portal_Square_Purple_Fit",
+              "SystemId": "AWB_Portal_Square_Purple_Fit",
               "PositionOffset": {
                 "Y": -1,
                 "Z": -0.3,
@@ -59,7 +59,7 @@
               "Interactions": [
                 {
                   "Type": "ApplyEffect",
-                  "EffectId": "Warp_Page_Portal_Teleport",
+                  "EffectId": "Portal_Teleport",
                   "Effects": {
                     "WorldSoundEventId": "SFX_Potion_Drink_Success"
                   }
@@ -71,7 +71,7 @@
                 {
                   "Type": "OpenCustomUI",
                   "Page": {
-                    "Id": "WarpPageTeleporter"
+                    "Id": "AWBWarpPageTeleporter"
                   }
                 }
               ]
@@ -86,7 +86,7 @@
           {
             "Type": "OpenCustomUI",
             "Page": {
-              "Id": "WarpPageTeleporter"
+              "Id": "AWBWarpPageTeleporter"
             }
           }
         ]

@@ -7,8 +7,8 @@
   "MaxStack": 1,
   "ItemLevel": 30,
   "PlayerAnimationsId": "Item",
-  "Model": "Items/Utility/Warp_Page/Warp_Page.blockymodel",
-  "Texture": "Items/Utility/Warp_Page/Warp_Page_Bound.png",
+  "Model": "Items/Utility/Warp_Page/AWB_Warp_Page.blockymodel",
+  "Texture": "Items/Utility/Warp_Page/AWB_Warp_Page_Bound.png",
   "IconProperties": {
     "Scale": 0.76,
     "Rotation": [
@@ -25,7 +25,7 @@
     "Secondary": {
       "Interactions": [
         {
-          "Type": "TeleportWarpPage",
+          "Type": "AWBTeleportWarpPage",
           "Cooldown": 1
         }
       ]

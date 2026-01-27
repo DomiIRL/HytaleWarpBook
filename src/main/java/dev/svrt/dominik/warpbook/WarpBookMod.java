@@ -60,17 +60,17 @@ public class WarpBookMod extends JavaPlugin {
         this.paymentService = new PaymentService();
 
         ComponentRegistryProxy<ChunkStore> chunkStoreRegistry = getChunkStoreRegistry();
-        TELEPORTER_COMPONENT_TYPE = chunkStoreRegistry.registerComponent(WarpPageTeleporter.class, "WarpPageTeleporter", WarpPageTeleporter.CODEC);
+        TELEPORTER_COMPONENT_TYPE = chunkStoreRegistry.registerComponent(WarpPageTeleporter.class, "AWBWarpPageTeleporter", WarpPageTeleporter.CODEC);
 
         CodecMapRegistry.Assets<Interaction, ?> interactionRegistry = getCodecRegistry(Interaction.CODEC);
-        interactionRegistry.register("TeleportWarpPage", TeleportWarpPageInteraction.class, TeleportWarpPageInteraction.CODEC);
-        interactionRegistry.register("OpenWarpBook", OpenWarpBookInteraction.class, OpenWarpBookInteraction.CODEC);
-        interactionRegistry.register("WarpPageTeleporter", WarpPageTeleporterInteraction.class, WarpPageTeleporterInteraction.CODEC);
+        interactionRegistry.register("AWBTeleportWarpPage", TeleportWarpPageInteraction.class, TeleportWarpPageInteraction.CODEC);
+        interactionRegistry.register("AWBOpenWarpBook", OpenWarpBookInteraction.class, OpenWarpBookInteraction.CODEC);
+        interactionRegistry.register("AWBWarpPageTeleporter", WarpPageTeleporterInteraction.class, WarpPageTeleporterInteraction.CODEC);
 
         CodecMapRegistry<OpenCustomUIInteraction.CustomPageSupplier, Codec<? extends OpenCustomUIInteraction.CustomPageSupplier>> customPageRegistry = getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC);
-        customPageRegistry.register("WarpBook", WarpBookUISupplier.class, WarpBookUISupplier.CODEC);
-        customPageRegistry.register("BindWarpPage", BindWarpPageUISupplier.class, BindWarpPageUISupplier.CODEC);
-        customPageRegistry.register("WarpPageTeleporter", WarpPageTeleporterUISupplier.class, WarpPageTeleporterUISupplier.CODEC);
+        customPageRegistry.register("AWBWarpBook", WarpBookUISupplier.class, WarpBookUISupplier.CODEC);
+        customPageRegistry.register("AWBBindWarpPage", BindWarpPageUISupplier.class, BindWarpPageUISupplier.CODEC);
+        customPageRegistry.register("AWBWarpPageTeleporter", WarpPageTeleporterUISupplier.class, WarpPageTeleporterUISupplier.CODEC);
 
         getEventRegistry().registerGlobal(BootEvent.class, RandomWarpPagesDropListAdder::onBoot);
 
