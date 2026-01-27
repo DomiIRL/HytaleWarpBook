@@ -1,0 +1,32 @@
+$C = "Common.ui";
+
+$C.@PageOverlay {}
+
+$C.@Container {
+  Anchor: (Width: 500, Height: 200);
+
+  #Title {
+    Group {
+      $C.@Title {
+        @Text = %server.customUI.warpPage.title;
+      }
+
+    }
+  }
+
+  #Content {
+    LayoutMode: Top;
+    FlexWeight: 1;
+
+    Group {
+        FlexWeight: 1;
+
+        Label {
+            Text: %server.customUI.warpPage.enterName;
+            Style: (FontSize: 16, TextColor: #ffffff);
+        }
+    }
+  }
+}
+
+$C.@BackButton {}

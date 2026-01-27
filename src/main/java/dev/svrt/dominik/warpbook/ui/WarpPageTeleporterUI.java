@@ -6,10 +6,13 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import dev.svrt.dominik.warpbook.data.WarpPageBinding;
 
 import javax.annotation.Nonnull;
 
@@ -28,6 +31,31 @@ public class WarpPageTeleporterUI extends InteractiveCustomUIPage<WarpPageTelepo
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commands,
                       @Nonnull UIEventBuilder events, @Nonnull Store<EntityStore> store) {
 
+        WarpPageBinding binding = getWarpPageBinding();
+
+        if (binding == null) {
+            // TODO: Show "requires a warp page ui"
+            return;
+        }
+
+        if (binding.transform == null || binding.world == null) {
+            // TODO: Show "This warp pages destination is unknown"
+            return;
+        }
+
+        // TODO: Show "Do you want to bind this Warp Page to the Portal for eternity until overwritten?"
+    }
+
+    private WarpPageBinding getWarpPageBinding() {
+        ItemContainer container = context.getHeldItemContainer();
+        if (container == null) {
+            return null;
+        }
+        ItemStack itemStack = container.getItemStack(context.getHeldItemSlot());
+        if (itemStack == null) {
+            return null;
+        }
+        return itemStack.getFromMetadataOrNull(WarpPageBinding.KEYED_CODEC);
     }
 
     @Override
