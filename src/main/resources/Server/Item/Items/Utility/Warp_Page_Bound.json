@@ -25,7 +25,7 @@
     "Secondary": {
       "Interactions": [
         {
-          "Type": "TeleportWarpPageInteraction",
+          "Type": "TeleportWarpPage",
           "Cooldown": 1
         }
       ]

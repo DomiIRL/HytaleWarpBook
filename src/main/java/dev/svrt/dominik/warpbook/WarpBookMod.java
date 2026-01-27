@@ -1,5 +1,6 @@
 package dev.svrt.dominik.warpbook;
 
+import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.BootEvent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
@@ -10,10 +11,12 @@ import com.hypixel.hytale.server.core.plugin.registry.CodecMapRegistry;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.Config;
-import dev.svrt.dominik.warpbook.components.Teleporter;
+import dev.svrt.dominik.warpbook.components.WarpPageTeleporter;
 import dev.svrt.dominik.warpbook.config.WarpBookConfig;
+import dev.svrt.dominik.warpbook.interactions.BindWarpPageTeleporterInteraction;
 import dev.svrt.dominik.warpbook.interactions.OpenWarpBookInteraction;
 import dev.svrt.dominik.warpbook.interactions.TeleportWarpPageInteraction;
+import dev.svrt.dominik.warpbook.interactions.WarpPageTeleporterInteraction;
 import dev.svrt.dominik.warpbook.listener.RandomWarpPagesDropListAdder;
 import dev.svrt.dominik.warpbook.services.*;
 import dev.svrt.dominik.warpbook.systems.TeleportCancelSystem;
@@ -21,12 +24,11 @@ import dev.svrt.dominik.warpbook.ui.BindWarpPageUISupplier;
 import dev.svrt.dominik.warpbook.ui.WarpBookUISupplier;
 
 import javax.annotation.Nonnull;
-import java.util.logging.Level;
 
 public class WarpBookMod extends JavaPlugin {
 
     public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    public static ComponentType<ChunkStore, Teleporter> TELEPORTER_COMPONENT_TYPE;
+    public static ComponentType<ChunkStore, WarpPageTeleporter> TELEPORTER_COMPONENT_TYPE;
 
     private static WarpBookMod instance;
 
@@ -56,20 +58,28 @@ public class WarpBookMod extends JavaPlugin {
         this.teleportationService = new TeleportationService();
         this.paymentService = new PaymentService();
 
-        TELEPORTER_COMPONENT_TYPE = getChunkStoreRegistry().registerComponent(Teleporter.class, "WarpBookTeleporter", Teleporter.CODEC);
+        ComponentRegistryProxy<ChunkStore> chunkStoreRegistry = getChunkStoreRegistry();
+        TELEPORTER_COMPONENT_TYPE = chunkStoreRegistry.registerComponent(WarpPageTeleporter.class, "WarpPageTeleporter", WarpPageTeleporter.CODEC);
 
         CodecMapRegistry.Assets<Interaction, ?> interactionRegistry = getCodecRegistry(Interaction.CODEC);
-        interactionRegistry.register("TeleportWarpPageInteraction", TeleportWarpPageInteraction.class, TeleportWarpPageInteraction.CODEC);
-        interactionRegistry.register("OpenWarpBookInteraction", OpenWarpBookInteraction.class, OpenWarpBookInteraction.CODEC);
+        interactionRegistry.register("TeleportWarpPage", TeleportWarpPageInteraction.class, TeleportWarpPageInteraction.CODEC);
+        interactionRegistry.register("OpenWarpBook", OpenWarpBookInteraction.class, OpenWarpBookInteraction.CODEC);
+        interactionRegistry.register("WarpPageTeleporter", WarpPageTeleporterInteraction.class, WarpPageTeleporterInteraction.CODEC);
+        interactionRegistry.register("BindWarpPageTeleporter", BindWarpPageTeleporterInteraction.class, BindWarpPageTeleporterInteraction.CODEC);
 
         getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register("Warp_Book_UI", WarpBookUISupplier.class, WarpBookUISupplier.CODEC);
         getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register("Bind_Warp_Page_UI", BindWarpPageUISupplier.class, BindWarpPageUISupplier.CODEC);
 
-        getEntityStoreRegistry().registerSystem(new TeleportCancelSystem());
-
         getEventRegistry().registerGlobal(BootEvent.class, RandomWarpPagesDropListAdder::onBoot);
 
-        LOGGER.at(Level.INFO).log("Warp Book plugin loaded!");
+        LOGGER.atInfo().log("Warp Book plugin loaded!");
+    }
+
+    @Override
+    protected void start() {
+        getEntityStoreRegistry().registerSystem(new TeleportCancelSystem());
+
+        LOGGER.atInfo().log("Warp Book plugin started!");
     }
 
     @Override

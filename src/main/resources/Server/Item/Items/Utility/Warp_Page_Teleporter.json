@@ -34,14 +34,6 @@
         "GatherType": "SoftBlocks"
       }
     },
-    "BlockEntity": {
-      "Components": {
-        "Teleporter": {
-          "WarpNameWordList": "Runes"
-        },
-        "TrackedPlacement": {}
-      }
-    },
     "BlockParticleSetId": "Stone",
     "BlockSoundSetId": "Stone",
     "State": {
@@ -67,7 +59,7 @@
               "Interactions": [
                 {
                   "Type": "ApplyEffect",
-                  "EffectId": "Portal_Teleport",
+                  "EffectId": "Warp_Page_Portal_Teleport",
                   "Effects": {
                     "WorldSoundEventId": "SFX_Potion_Drink_Success"
                   }
@@ -77,13 +69,7 @@
             "Use": {
               "Interactions": [
                 {
-                  "Type": "OpenCustomUI",
-                  "Page": {
-                    "Id": "Teleporter",
-                    "Mode": "Warp",
-                    "ActiveState": "Active",
-                    "WarpNameWordList": "Runes"
-                  }
+                  "Type": "BindWarpPageTeleporter"
                 }
               ]
             }
@@ -95,13 +81,7 @@
       "Use": {
         "Interactions": [
           {
-            "Type": "OpenCustomUI",
-            "Page": {
-              "Id": "Teleporter",
-              "Mode": "Warp",
-              "ActiveState": "Active",
-              "WarpNameWordList": "Runes"
-            }
+            "Type": "BindWarpPageTeleporter"
           }
         ]
       }
@@ -123,6 +103,6 @@
     ]
   },
   "ItemLevel": 30,
-  "Quality": "Rare",
+  "Quality": "Epic",
   "ItemSoundSetId": "ISS_Blocks_Stone"
 }

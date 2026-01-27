@@ -29,6 +29,16 @@ public class WarpPageBinding {
   public boolean random = false;
 
   @Override
+  public WarpPageBinding clone() {
+    WarpPageBinding binding = new WarpPageBinding();
+    binding.name = this.name;
+    binding.transform = this.transform != null ? this.transform.clone() : null;
+    binding.world = this.world;
+    binding.random = this.random;
+    return binding;
+  }
+
+  @Override
   public String toString() {
     return "WarpPageBinding{" +
       "name='" + name + '\'' +
