@@ -34,7 +34,7 @@
         {
           "Type": "OpenCustomUI",
           "Page": {
-            "Id": "Warp_Book_UI"
+            "Id": "WarpBook"
           }
         }
       ]

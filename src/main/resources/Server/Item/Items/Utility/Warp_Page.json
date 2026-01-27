@@ -27,7 +27,7 @@
         {
           "Type": "OpenCustomUI",
           "Page": {
-            "Id": "Bind_Warp_Page_UI"
+            "Id": "BindWarpPage"
           }
         }
       ]

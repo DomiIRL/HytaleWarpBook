@@ -1,5 +1,6 @@
 package dev.svrt.dominik.warpbook;
 
+import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.BootEvent;
@@ -13,7 +14,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.Config;
 import dev.svrt.dominik.warpbook.components.WarpPageTeleporter;
 import dev.svrt.dominik.warpbook.config.WarpBookConfig;
-import dev.svrt.dominik.warpbook.interactions.BindWarpPageTeleporterInteraction;
 import dev.svrt.dominik.warpbook.interactions.OpenWarpBookInteraction;
 import dev.svrt.dominik.warpbook.interactions.TeleportWarpPageInteraction;
 import dev.svrt.dominik.warpbook.interactions.WarpPageTeleporterInteraction;
@@ -22,6 +22,7 @@ import dev.svrt.dominik.warpbook.services.*;
 import dev.svrt.dominik.warpbook.systems.TeleportCancelSystem;
 import dev.svrt.dominik.warpbook.ui.BindWarpPageUISupplier;
 import dev.svrt.dominik.warpbook.ui.WarpBookUISupplier;
+import dev.svrt.dominik.warpbook.ui.WarpPageTeleporterUISupplier;
 
 import javax.annotation.Nonnull;
 
@@ -65,10 +66,11 @@ public class WarpBookMod extends JavaPlugin {
         interactionRegistry.register("TeleportWarpPage", TeleportWarpPageInteraction.class, TeleportWarpPageInteraction.CODEC);
         interactionRegistry.register("OpenWarpBook", OpenWarpBookInteraction.class, OpenWarpBookInteraction.CODEC);
         interactionRegistry.register("WarpPageTeleporter", WarpPageTeleporterInteraction.class, WarpPageTeleporterInteraction.CODEC);
-        interactionRegistry.register("BindWarpPageTeleporter", BindWarpPageTeleporterInteraction.class, BindWarpPageTeleporterInteraction.CODEC);
 
-        getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register("Warp_Book_UI", WarpBookUISupplier.class, WarpBookUISupplier.CODEC);
-        getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register("Bind_Warp_Page_UI", BindWarpPageUISupplier.class, BindWarpPageUISupplier.CODEC);
+        CodecMapRegistry<OpenCustomUIInteraction.CustomPageSupplier, Codec<? extends OpenCustomUIInteraction.CustomPageSupplier>> customPageRegistry = getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC);
+        customPageRegistry.register("WarpBook", WarpBookUISupplier.class, WarpBookUISupplier.CODEC);
+        customPageRegistry.register("BindWarpPage", BindWarpPageUISupplier.class, BindWarpPageUISupplier.CODEC);
+        customPageRegistry.register("WarpPageTeleporter", WarpPageTeleporterUISupplier.class, WarpPageTeleporterUISupplier.CODEC);
 
         getEventRegistry().registerGlobal(BootEvent.class, RandomWarpPagesDropListAdder::onBoot);
 

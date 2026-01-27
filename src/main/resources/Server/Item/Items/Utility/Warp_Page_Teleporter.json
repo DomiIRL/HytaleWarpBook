@@ -69,7 +69,10 @@
             "Use": {
               "Interactions": [
                 {
-                  "Type": "BindWarpPageTeleporter"
+                  "Type": "OpenCustomUI",
+                  "Page": {
+                    "Id": "WarpPageTeleporter"
+                  }
                 }
               ]
             }
@@ -81,7 +84,10 @@
       "Use": {
         "Interactions": [
           {
-            "Type": "BindWarpPageTeleporter"
+            "Type": "OpenCustomUI",
+            "Page": {
+              "Id": "WarpPageTeleporter"
+            }
           }
         ]
       }
