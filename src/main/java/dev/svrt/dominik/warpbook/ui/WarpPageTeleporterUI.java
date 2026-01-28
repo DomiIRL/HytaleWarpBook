@@ -35,14 +35,17 @@ public class WarpPageTeleporterUI extends InteractiveCustomUIPage<WarpPageTelepo
 
         if (binding == null) {
             // TODO: Show "requires a warp page ui"
+            commands.append("AWB_WarpPagePortalError.ui");
             return;
         }
 
         if (binding.transform == null || binding.world == null) {
+            commands.append("AWB_WarpPagePortalError.ui");
             // TODO: Show "This warp pages destination is unknown"
             return;
         }
 
+        commands.append("AWB_WarpPagePortal.ui");
         // TODO: Show "Do you want to bind this Warp Page to the Portal for eternity until overwritten?"
     }
 
