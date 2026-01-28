@@ -33,5 +33,13 @@ public class WarpPageTeleporter implements Component<ChunkStore> {
         }
         return warpPageTeleporter;
     }
-}
 
+    @Nullable
+    public WarpPageBinding getWarpPageBinding() {
+        return warpPageBinding;
+    }
+
+    public void setWarpPageBinding(@Nullable WarpPageBinding warpPageBinding) {
+        this.warpPageBinding = warpPageBinding;
+    }
+}

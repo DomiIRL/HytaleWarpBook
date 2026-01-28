@@ -56,12 +56,19 @@
           ],
           "Interactions": {
             "CollisionEnter": {
+              "Cooldown": {
+                "Cooldown": 1
+              },
               "Interactions": [
                 {
-                  "Type": "ApplyEffect",
-                  "EffectId": "Portal_Teleport",
-                  "Effects": {
-                    "WorldSoundEventId": "SFX_Potion_Drink_Success"
+                  "Type": "AWBWarpPageTeleporter",
+                  "Particle": "Teleport",
+                  "Next": {
+                    "Type": "ApplyEffect",
+                    "EffectId": "AWB_Warp_Page_Teleporter_Portal_Teleport",
+                    "Effects": {
+                      "WorldSoundEventId": "SFX_Potion_Drink_Success"
+                    }
                   }
                 }
               ]
@@ -71,7 +78,8 @@
                 {
                   "Type": "OpenCustomUI",
                   "Page": {
-                    "Id": "AWBWarpPageTeleporter"
+                    "Id": "AWBWarpPageTeleporter",
+                    "ActiveState": "Active"
                   }
                 }
               ]
@@ -86,7 +94,8 @@
           {
             "Type": "OpenCustomUI",
             "Page": {
-              "Id": "AWBWarpPageTeleporter"
+              "Id": "AWBWarpPageTeleporter",
+              "ActiveState": "Active"
             }
           }
         ]
