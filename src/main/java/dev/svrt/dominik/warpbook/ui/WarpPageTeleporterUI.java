@@ -4,6 +4,7 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -35,17 +36,21 @@ public class WarpPageTeleporterUI extends InteractiveCustomUIPage<WarpPageTelepo
 
         if (binding == null) {
             // TODO: Show "requires a warp page ui"
-            commands.append("AWB_WarpPagePortalError.ui");
+            commands.append("Pages/AWB_WarpPageTeleporterError.ui");
+            commands.set("#UsageErrorTitle.Text", Message.translation("awb.customUI.warpPageTeleporter.needWarpPage"));
+            commands.set("#UsageErrorLabel.Text", Message.translation("awb.customUI.warpPageTeleporter.needBoundWarpPage"));
             return;
         }
 
         if (binding.transform == null || binding.world == null) {
-            commands.append("AWB_WarpPagePortalError.ui");
+            commands.append("Pages/AWB_WarpPageTeleporterError.ui");
+            commands.set("#UsageErrorTitle.Text", Message.translation("awb.customUI.warpPageTeleporter.needWarpPage"));
+            commands.set("#UsageErrorLabel.Text", Message.translation("awb.customUI.warpPageTeleporter.needValidWarpPage"));
             // TODO: Show "This warp pages destination is unknown"
             return;
         }
 
-        commands.append("AWB_WarpPagePortal.ui");
+        commands.append("Pages/AWB_WarpPageTeleporter.ui");
         // TODO: Show "Do you want to bind this Warp Page to the Portal for eternity until overwritten?"
     }
 

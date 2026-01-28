@@ -1,8 +1,8 @@
-$C = "Common.ui";
+$C = "../Common.ui";
 
 $C.@PageOverlay {}
 
-$C.@Container {
+$C.@DecoratedContainer {
   Anchor: (Width: 500, Height: 200);
 
   #Title {
