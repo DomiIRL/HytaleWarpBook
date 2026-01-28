@@ -33,7 +33,7 @@ public class BindWarpPageUI extends InteractiveCustomUIPage<BindWarpPageUI.BindW
     @Override
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commands,
                       @Nonnull UIEventBuilder events, @Nonnull Store<EntityStore> store) {
-        commands.append("BindWarpPage.ui");
+        commands.append("AWB_BindWarpPage.ui");
 
         events.addEventBinding(
           CustomUIEventBindingType.ValueChanged,

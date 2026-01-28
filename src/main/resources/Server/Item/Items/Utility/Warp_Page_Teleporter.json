@@ -1,0 +1,114 @@
+{
+  "TranslationProperties": {
+    "Name": "awb.items.Warp_Page_Teleporter.name",
+    "Description": "awb.items.Warp_Page_Teleporter.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Teleporter.png",
+  "Categories": [
+    "Blocks.Structural"
+  ],
+  "MaxStack": 10,
+  "PlayerAnimationsId": "Block",
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+        "Teleporter_Place"
+      ]
+    }
+  },
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "CustomModel": "Blocks/Miscellaneous/Teleporter_Pad.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Miscellaneous/Teleporter_Pad_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "Flags": {
+      "IsUsable": true
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "SoftBlocks"
+      }
+    },
+    "BlockParticleSetId": "Stone",
+    "BlockSoundSetId": "Stone",
+    "State": {
+      "Definitions": {
+        "Active": {
+          "AmbientSoundEventId": "SFX_Portal_Neutral",
+          "Particles": [
+            {
+              "SystemId": "AWB_Portal_Square_Purple_Fit",
+              "PositionOffset": {
+                "Y": -1,
+                "Z": -0.3,
+                "X": 0.0
+              },
+              "RotationOffset": {
+                "Yaw": 0.0
+              },
+              "Scale": 1.0
+            }
+          ],
+          "Interactions": {
+            "CollisionEnter": {
+              "Interactions": [
+                {
+                  "Type": "ApplyEffect",
+                  "EffectId": "Portal_Teleport",
+                  "Effects": {
+                    "WorldSoundEventId": "SFX_Potion_Drink_Success"
+                  }
+                }
+              ]
+            },
+            "Use": {
+              "Interactions": [
+                {
+                  "Type": "OpenCustomUI",
+                  "Page": {
+                    "Id": "AWBWarpPageTeleporter"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": {
+              "Id": "AWBWarpPageTeleporter"
+            }
+          }
+        ]
+      }
+    },
+    "ParticleColor": "#534c51",
+    "VariantRotation": "NESW",
+    "HitboxType": "Teleporter"
+  },
+  "IconProperties": {
+    "Scale": 0.25,
+    "Rotation": [
+      22.5,
+      45.0,
+      22.5
+    ],
+    "Translation": [
+      3.0,
+      -42.0
+    ]
+  },
+  "ItemLevel": 30,
+  "Quality": "Epic",
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

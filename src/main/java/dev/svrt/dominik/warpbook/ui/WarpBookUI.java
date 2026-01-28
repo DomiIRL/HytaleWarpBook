@@ -45,7 +45,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
     @Override
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commands,
                       @Nonnull UIEventBuilder events, @Nonnull Store<EntityStore> store) {
-        commands.append("WarpBook.ui");
+        commands.append("AWB_WarpBook.ui");
 
         commands.clear("#WarpList");
 
@@ -69,11 +69,16 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
 
             String selector = "#WarpList[" + uiIndex + "]";
 
-            commands.append("#WarpList", "WarpPage.ui");
+            commands.append("#WarpList", "AWB_WarpPage.ui");
 
-            String warpName = pageBinding.name != null ? pageBinding.name : String.format("Warp %d", uiIndex + 1);
+            String warpName = pageBinding.name != null ? pageBinding.name : "Ancient Destination";
             Transform transform = pageBinding.transform;
-            String position = String.format("X: %.1f, Y: %.1f, Z: %.1f (%s)", transform.getPosition().x, transform.getPosition().y, transform.getPosition().z, pageBinding.world);
+
+            String position = "Unknown";
+            if (!pageBinding.random) {
+                position = String.format("X: %.1f, Y: %.1f, Z: %.1f",
+                  transform.getPosition().x, transform.getPosition().y, transform.getPosition().z);
+            }
 
             commands.set(selector + " #Name.Text", warpName);
             commands.set(selector + " #Position.Text", position);
@@ -96,7 +101,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
 
         if (data.slot != null) {
             try {
-                int slotIndex = Integer.parseInt(data.slot);
+                short slotIndex = Short.parseShort(data.slot);
                 teleportToWarp(ref, store, slotIndex);
             } catch (NumberFormatException e) {
                 playerRef.sendMessage(Message.raw("Invalid slot number!"));
@@ -104,8 +109,8 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
         }
     }
 
-    private void teleportToWarp(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, int slot) {
-        ItemStack warpPage = container.getItemStack((short) slot);
+    private void teleportToWarp(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, short slot) {
+        ItemStack warpPage = container.getItemStack(slot);
 
         if (warpPage == null || warpPage.isEmpty() || !warpPage.getItemId().equals("Warp_Page_Bound")) {
             playerRef.sendMessage(Message.raw("Invalid warp page itemstack!"));
@@ -114,7 +119,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
         }
 
         WarpPageUsageService usageService = WarpBookMod.getInstance().getWarpPageUsageService();
-        boolean success = usageService.startTeleportPlayer(ref, store, warpPage);
+        boolean success = usageService.startTeleportPlayer(ref, store, warpPage, container, slot);
         if (success) {
             close();
         } else {

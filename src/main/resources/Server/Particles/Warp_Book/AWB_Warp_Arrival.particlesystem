@@ -1,0 +1,40 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "AWB_Warp_Ground_Core_Spawn",
+      "PositionOffset": {
+        "X": 0,
+        "Z": 0
+      },
+      "FixedRotation": false,
+      "StartDelay": 0.0
+    },
+    {
+      "SpawnerId": "AWB_Warp_Ground_Core_Start_Arrival",
+      "StartDelay": 0.0,
+      "PositionOffset": {
+        "Y": -0.25
+      }
+    },
+    {
+      "SpawnerId": "AWB_Warp_Ground_Beam_Constant2",
+      "RotationOffset": {
+        "Roll": -90.0
+      },
+      "StartDelay": 0.0,
+      "LifeSpan": {
+        "Min": 1.0,
+        "Max": 1.0
+      },
+      "PositionOffset": {
+        "Y": 0.0
+      }
+    },
+    {
+      "SpawnerId": "AWB_Warp_Ground_Beam",
+      "StartDelay": 0.1
+    }
+  ],
+  "CullDistance": 100,
+  "LifeSpan": 2
+}

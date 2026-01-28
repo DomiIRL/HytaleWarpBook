@@ -1,14 +1,14 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Warp_Book.name",
-    "Description": "server.items.Warp_Book.description"
+    "Name": "awb.items.Warp_Book.name",
+    "Description": "awb.items.Warp_Book.description"
   },
-  "Icon": "Icons/ItemsGenerated/Warp_Book.png",
-  "Quality": "Rare",
+  "Icon": "Icons/ItemsGenerated/AWB_Warp_Book.png",
+  "Quality": "Epic",
   "MaxStack": 1,
   "ItemLevel": 40,
-  "Model": "Items/Utility/Warp_Book/Warp_Book.blockymodel",
-  "Texture": "Items/Utility/Warp_Book/Warp_Book.png",
+  "Model": "Items/Utility/Warp_Book/AWB_Warp_Book.blockymodel",
+  "Texture": "Items/Utility/Warp_Book/AWB_Warp_Book.png",
   "IconProperties": {
     "Scale": 0.745,
     "Rotation": [
@@ -25,7 +25,7 @@
     "Primary": {
       "Interactions": [
         {
-          "Type": "OpenWarpBookInteraction"
+          "Type": "AWBOpenWarpBook"
         }
       ]
     },
@@ -34,7 +34,7 @@
         {
           "Type": "OpenCustomUI",
           "Page": {
-            "Id": "Warp_Book_UI"
+            "Id": "AWBWarpBook"
           }
         }
       ]
@@ -42,7 +42,7 @@
   },
   "DroppedItemAnimation": "Items/Animations/Dropped/Dropped_Diagonal_Left.blockyanim",
   "Scale": 1.2,
-  "PlayerAnimationsId": "Warp_Book",
+  "PlayerAnimationsId": "AWB_Warp_Book",
   "UsePlayerAnimations": true,
   "Tags": {
     "Type": [
@@ -64,7 +64,7 @@
         "Quantity": 3
       },
       {
-        "ItemId": "Ingredient_Bar_Thorium",
+        "ItemId": "Ingredient_Bar_Cobalt",
         "Quantity": 3
       },
       {

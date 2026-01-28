@@ -56,8 +56,13 @@ public class TeleportWarpPageInteraction extends SimpleInstantInteraction {
             return;
         }
 
+        if (context.getHeldItemContainer() == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+
         WarpPageUsageService usageService = WarpBookMod.getInstance().getWarpPageUsageService();
-        boolean success = usageService.startTeleportPlayer(entityRef, entityRef.getStore(), heldItem);
+        boolean success = usageService.startTeleportPlayer(entityRef, entityRef.getStore(), heldItem, context.getHeldItemContainer(), context.getHeldItemSlot());
         if (success) {
             context.getState().state = InteractionState.Finished;
         } else {

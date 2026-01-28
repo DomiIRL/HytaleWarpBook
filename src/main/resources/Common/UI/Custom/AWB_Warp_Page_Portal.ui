@@ -8,7 +8,7 @@ $C.@Container {
   #Title {
     Group {
       $C.@Title {
-        @Text = %server.customUI.warpPage.title;
+        @Text = %awb.customUI.warpPage.title;
       }
 
     }
@@ -22,19 +22,10 @@ $C.@Container {
         FlexWeight: 1;
 
         Label {
-            Text: %server.customUI.warpPage.enterName;
+            Text: %awb.customUI.warpPage.enterName;
             Style: (FontSize: 16, TextColor: #ffffff);
         }
-
-        $C.@TextField #Name {
-            Style: (FontSize: 18, TextColor: #ffffff);
-        }
     }
-
-    $C.@TextButton #BindButton {
-        @Text = %server.customUI.warpPage.bind;
-        Anchor: (Width: 150, Height: 40, Horizontal: 1);
-      }
   }
 }
 

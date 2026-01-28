@@ -1,108 +1,85 @@
 plugins {
     id 'java'
-    id 'com.gradleup.shadow' version '9.3.1'
+    id 'org.jetbrains.gradle.plugin.idea-ext' version '1.3'
 }
 
-group = 'dev.svrt.dominik'
-version = '1.1'
+ext {
+    if (System.getProperty("os.name").toLowerCase().contains("win")) {
+        hytaleHome = "${System.getProperty("user.home")}/AppData/Roaming/Hytale"
+    } else {
+        hytaleHome = "${System.getProperty("user.home")}/.var/app/com.hypixel.HytaleLauncher/data/Hytale"
+    }
+}
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
-    }
+    toolchain.languageVersion = JavaLanguageVersion.of(java_version)
+    withSourcesJar()
+    withJavadocJar()
+}
+
+// Quiet warnings about missing Javadocs.
+javadoc {
+    options.addStringOption('Xdoclint:-missing', '-quiet')
 }
 
 repositories {
     mavenCentral()
+    maven {
+        name = 'HytaleRepo'
+        url = uri('https://maven.hytale.com/release')
+    }
 }
 
+// Adds the Hytale server as a build dependency, allowing you to reference and
+// compile against their code. This requires you to have Hytale installed using
+// the official launcher for now.
 dependencies {
-    // Local HytaleServer dependency
-    compileOnly files('libs/HytaleServer.jar')
+    implementation('com.hypixel.hytale:Server:+')
 }
 
-// Configure the JAR task
-jar {
-    archiveFileName = "${project.name}-${project.version}.jar"
+// Create the working directory to run the server if it does not already exist.
+def serverRunDir = file("$projectDir/run")
+if (!serverRunDir.exists()) {
+    serverRunDir.mkdirs()
 }
 
-// Configure Shadow JAR to create a single JAR with resources
-shadowJar {
-    archiveFileName = "${project.name}-${project.version}.jar"
-    archiveClassifier = ''
-    
-    // Exclude the HytaleServer from being bundled
-    dependencies {
-        exclude(dependency(files('libs/HytaleServer.jar')))
-    }
-}
-
-// Make build task use shadowJar
-build.dependsOn shadowJar
-
-// Task to run the Hytale server
-tasks.register('runServer', Exec) {
-    description = 'Builds plugin, deploys to Server/mods and starts the Hytale server'
-    group = 'application'
-    
-    dependsOn build
-
-    workingDir = file('Server')
-    commandLine 'java', '-jar', '../libs/HytaleServer.jar', '--assets', '../libs/Assets.zip'
-
-    // Enable interactive console
-    standardInput = System.in
-    standardOutput = System.out
-    errorOutput = System.err
-
-    doFirst {
-        // Ensure Server/mods directory exists
-        def modsDir = file('Server/mods')
-        modsDir.mkdirs()
-
-        // Copy the built JAR to Server/mods
-        def sourceJar = file("build/libs/${project.name}-${project.version}.jar")
-        if (sourceJar.exists()) {
-            copy {
-                from sourceJar
-                into modsDir
-            }
-            println "Copied ${sourceJar.name} to ${modsDir.absolutePath}"
-        } else {
-            println "Warning: Built JAR not found at ${sourceJar}"
-        }
-        
-        println "Starting Hytale Server..."
-        println "Working directory: ${workingDir.absolutePath}"
-        println "Command: java -jar ../libs/HytaleServer.jar --assets ../libs/Assets.zip"
-    }
-}
-
-// Task to just deploy the plugin without running the server
-tasks.register('deployPlugin') {
-    description = 'Copies the built plugin JAR to Server/mods folder'
-    group = 'deployment'
-    
-    dependsOn build
-
+// Updates the manifest.json file with the latest properties defined in the
+// build.properties file. Currently we update the version and if packs are
+// included with the plugin.
+tasks.register('updatePluginManifest') {
+    def manifestFile = file('src/main/resources/manifest.json')
     doLast {
-        def modsDir = file('Server/mods')
-        modsDir.mkdirs()
-
-        def sourceJar = file("build/libs/${project.name}-${project.version}.jar")
-        if (sourceJar.exists()) {
-            copy {
-                from sourceJar
-                into modsDir
-            }
-            println "Plugin deployed to ${modsDir.absolutePath}"
-        } else {
-            println "Warning: Built JAR not found at ${sourceJar}"
+        if (!manifestFile.exists()) {
+            throw new GradleException("Could not find manifest.json at ${manifestFile.path}!")
         }
+        def manifestJson = new groovy.json.JsonSlurper().parseText(manifestFile.text)
+        manifestJson.Version = version
+        manifestJson.IncludesAssetPack = includes_pack.toBoolean()
+        manifestFile.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(manifestJson))
     }
 }
 
+// Makes sure the plugin manifest is up to date.
+tasks.named('processResources') {
+    dependsOn 'updatePluginManifest'
+}
 
-
-
-
+// Creates a run configuration in IDEA that will run the Hytale server with
+// your plugin and the default assets.
+idea.project.settings.runConfigurations {
+    'HytaleServer'(org.jetbrains.gradle.ext.Application) {
+        mainClass = 'com.hypixel.hytale.Main'
+        moduleName = project.idea.module.name + '.main'
+        programParameters = "--allow-op --assets=$hytaleHome/install/$patchline/package/game/latest/Assets.zip"
+        if (includes_pack.toBoolean()) {
+            programParameters += " --mods=${sourceSets.main.java.srcDirs.first().parentFile.absolutePath}"
+        }
+        if (load_user_mods.toBoolean()) {
+            programParameters += " --mods=$hytaleHome/UserData/Mods"
+        }
+        if (use_insecure_auth.toBoolean()) {
+            programParameters += " --auth-mode=insecure"
+        }
+        workingDirectory = serverRunDir.absolutePath
+    }
+}

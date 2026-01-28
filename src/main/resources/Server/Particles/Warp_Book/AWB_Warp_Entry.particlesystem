@@ -1,10 +1,10 @@
 {
   "Spawners": [
     {
-      "SpawnerId": "Warp_Portal_Ground"
+      "SpawnerId": "AWB_Warp_Ground"
     },
     {
-      "SpawnerId": "Warp_Portal_Ground_Core_Spawn",
+      "SpawnerId": "AWB_Warp_Ground_Core_Spawn",
       "PositionOffset": {
         "X": 0,
         "Z": 0
@@ -13,14 +13,14 @@
       "StartDelay": 1.5
     },
     {
-      "SpawnerId": "Warp_Portal_Ground_Core_Start",
+      "SpawnerId": "AWB_Warp_Ground_Core_Start",
       "StartDelay": 0.9,
       "PositionOffset": {
         "Y": -0.25
       }
     },
     {
-      "SpawnerId": "Warp_Portal_Ground_Beam_Constant",
+      "SpawnerId": "AWB_Warp_Ground_Beam_Constant",
       "RotationOffset": {
         "Pitch": 0.0,
         "Roll": -90.0
@@ -32,7 +32,7 @@
       }
     },
     {
-      "SpawnerId": "Warp_Portal_Ground_Beam_Constant2",
+      "SpawnerId": "AWB_Warp_Ground_Beam_Constant2",
       "RotationOffset": {
         "Roll": -90.0
       },
@@ -46,26 +46,8 @@
       }
     },
     {
-      "SpawnerId": "Warp_Portal_Ground_Beam",
-      "StartDelay": 2.7
-    },
-    {
-      "SpawnerId": "Warp_Portal_Ground_Core_Start2",
-      "PositionOffset": {
-        "X": 0,
-        "Z": 0
-      },
-      "FixedRotation": false,
-      "StartDelay": 2.6
-    },
-    {
-      "SpawnerId": "Warp_Portal_Ground_Start3",
-      "PositionOffset": {
-        "X": 0,
-        "Z": 0
-      },
-      "FixedRotation": false,
-      "StartDelay": 2.6
+      "SpawnerId": "AWB_Warp_Ground_Beam",
+      "StartDelay": 1.9
     }
   ],
   "CullDistance": 100,

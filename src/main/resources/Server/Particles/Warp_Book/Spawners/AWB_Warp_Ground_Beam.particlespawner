@@ -4,7 +4,7 @@
   "MaxConcurrentParticles": 1,
   "ParticleLifeSpan": {
     "Min": 0.2,
-    "Max": 0.25
+    "Max": 0.5
   },
   "SpawnRate": {
     "Min": 1.0,
@@ -36,12 +36,12 @@
         "Color": "#6b2d9e",
         "Scale": {
           "X": {
-            "Min": 50.0,
-            "Max": 60.0
+            "Min": 25.0,
+            "Max": 20.0
           },
           "Y": {
-            "Min": 50.0,
-            "Max": 50.0
+            "Min": 25.0,
+            "Max": 20.0
           }
         }
       }
@@ -60,8 +60,8 @@
       "Opacity": 1.0,
       "Rotation": {
         "Z": {
-          "Min": 90.0,
-          "Max": 90.0
+          "Min": 30.0,
+          "Max": 25.0
         }
       }
     },
