@@ -1,3 +1,5 @@
+Curseforge Page: https://www.curseforge.com/hytale/mods/arcanists-warp-book
+
 [![](https://i.imgur.com/c1fCoHy.png)](https://discord.gg/7BSqZa9r3P) [![](https://i.imgur.com/GH0SZoc.png)](https://github.com/DomiIRL/HytaleWarpBook/issues)
 
 Credits for the original idea go to the creator of the Minecraft Warp Book Mod  
