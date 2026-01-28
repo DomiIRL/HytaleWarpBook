@@ -119,5 +119,36 @@
   },
   "ItemLevel": 30,
   "Quality": "Epic",
-  "ItemSoundSetId": "ISS_Blocks_Stone"
+  "ItemSoundSetId": "ISS_Blocks_Stone",
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Ingredient_Void_Essence",
+        "Quantity": 12
+      },
+      {
+        "ItemId": "Wood_Azure_Trunk",
+        "Quantity": 8
+      },
+      {
+        "ItemId": "Plant_Crop_Mana3",
+        "Quantity": 5
+      },
+      {
+        "ResourceTypeId": "Rock",
+        "Quantity": 10
+      }
+    ],
+    "OutputQuantity": 1,
+    "TimeSeconds": 5,
+    "BenchRequirement": [
+      {
+        "Id": "Arcanebench",
+        "Type": "Crafting",
+        "Categories": [
+          "Arcane_Misc"
+        ]
+      }
+    ]
+  }
 }

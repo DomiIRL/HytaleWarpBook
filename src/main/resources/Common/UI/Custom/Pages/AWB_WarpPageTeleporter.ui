@@ -42,9 +42,20 @@ $C.@PageOverlay {
         Group {
           LayoutMode: Top;
 
-          Label {
-            Text: %awb.customUI.warpPageTeleporter.consumesPage;
-            Style: (FontSize: 12, TextColor: #afafafff, RenderItalics: true, HorizontalAlignment: Center);
+          Group {
+            LayoutMode: Left;
+
+            Label #CostLabel {
+              Style: (FontSize: 12, TextColor: #afafafff, RenderItalics: true);
+            }
+
+            Label #CostItem {
+              Style: (FontSize: 12, TextColor: #afafafff, RenderItalics: true);
+            }
+            Label #CostSuffix {
+              Text: %awb.customUI.warpPageTeleporter.consumesPageCostSuffix;
+              Style: (FontSize: 12, TextColor: #afafafff, RenderItalics: true);
+            }
           }
 
           $C.@TextButton #BindButton {

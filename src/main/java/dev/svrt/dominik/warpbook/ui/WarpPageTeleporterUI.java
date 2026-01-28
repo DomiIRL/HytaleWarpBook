@@ -5,6 +5,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -14,6 +15,9 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import dev.svrt.dominik.warpbook.WarpBookMod;
+import dev.svrt.dominik.warpbook.config.Price;
+import dev.svrt.dominik.warpbook.config.WarpBookConfig;
 import dev.svrt.dominik.warpbook.data.WarpPageBinding;
 
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -25,6 +29,8 @@ import com.hypixel.hytale.server.core.modules.block.BlockModule.BlockStateInfo;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import dev.svrt.dominik.warpbook.components.WarpPageTeleporter;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
+
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -65,6 +71,22 @@ public class WarpPageTeleporterUI extends InteractiveCustomUIPage<WarpPageTelepo
         }
 
         commands.append("Pages/AWB_WarpPageTeleporter.ui");
+
+        Price bindingPrice = WarpBookMod.get().getConfig().get().getTeleporterBindingPrice();
+        boolean isFree = bindingPrice == null || bindingPrice.isFree();
+        String costTranslationLabel = isFree ? "consumesPage" : "consumesPageCost";
+        Message costMessage = Message.translation("awb.customUI.warpPageTeleporter." + costTranslationLabel);
+
+        if (!isFree) {
+            costMessage.param("amount", bindingPrice.getAmount());
+            assert bindingPrice.getItemId() != null;
+            Item item = Item.getAssetMap().getAsset(bindingPrice.getItemId());
+            // For some reason translations dont work in params using workaround for now
+            assert item != null;
+            commands.set("#CostItem.Text", Message.translation(item.getTranslationKey()));
+        }
+        commands.set("#CostLabel.Text", costMessage);
+
         events.addEventBinding(CustomUIEventBindingType.Activating, "#BindButton", new EventData());
     }
 
@@ -93,6 +115,12 @@ public class WarpPageTeleporterUI extends InteractiveCustomUIPage<WarpPageTelepo
         WarpPageTeleporter teleporter = this.blockRef.getStore().getComponent(this.blockRef, WarpPageTeleporter.getComponentType());
 
         if (binding == null || blockStateInfo == null || teleporter == null) {
+            player.getPageManager().setPage(ref, store, Page.None);
+            return;
+        }
+
+        // Payment
+        if (!WarpBookMod.get().getPaymentService().processTeleporterBindingPayment(player)) {
             player.getPageManager().setPage(ref, store, Page.None);
             return;
         }
