@@ -38,7 +38,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
             this.container = null;
             return;
         }
-        WarpBookService warpBookService = WarpBookMod.getInstance().getWarpBookService();
+        WarpBookService warpBookService = WarpBookMod.get().getWarpBookService();
         this.container = warpBookService.ensureWarpBookContainer(itemContainer, context.getHeldItemSlot());
     }
 
@@ -118,7 +118,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
             return;
         }
 
-        WarpPageUsageService usageService = WarpBookMod.getInstance().getWarpPageUsageService();
+        WarpPageUsageService usageService = WarpBookMod.get().getWarpPageUsageService();
         boolean success = usageService.startTeleportPlayer(ref, store, warpPage, container, slot);
         if (success) {
             close();

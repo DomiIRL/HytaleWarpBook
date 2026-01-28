@@ -12,20 +12,26 @@ import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.svrt.dominik.warpbook.data.WarpPageBinding;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class WarpPageTeleporterUI extends InteractiveCustomUIPage<WarpPageTeleporterUI.BindWarpPortalEventData> {
 
     public String name;
 
     private InteractionContext context;
+    private Ref<ChunkStore> blockRef;
+    private String activeState;
 
-    public WarpPageTeleporterUI(PlayerRef playerRef, InteractionContext context) {
+    public WarpPageTeleporterUI(PlayerRef playerRef, InteractionContext context, @Nonnull Ref<ChunkStore> blockRef, @Nullable String activeState) {
         super(playerRef, CustomPageLifetime.CanDismiss, BindWarpPortalEventData.CODEC);
         this.context = context;
+        this.blockRef = blockRef;
+        this.activeState = activeState;
     }
 
     @Override

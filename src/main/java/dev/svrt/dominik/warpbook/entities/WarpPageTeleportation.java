@@ -78,7 +78,7 @@ public class WarpPageTeleportation {
       return;
     }
 
-    TeleportationService teleportationService = WarpBookMod.getInstance().getTeleportationService();
+    TeleportationService teleportationService = WarpBookMod.get().getTeleportationService();
     UUID playerUUID = uuidComponent.getUuid();
 
     if (teleportationService.hasActiveTeleport(playerUUID)) {
@@ -92,7 +92,7 @@ public class WarpPageTeleportation {
       return;
     }
 
-    boolean instantTeleport = WarpBookMod.getInstance().getConfig().get().isInstantTeleport();
+    boolean instantTeleport = WarpBookMod.get().getConfig().get().isInstantTeleport();
 
     scheduleTeleportTask(world, playerUUID, teleportationService, instantTeleport);
     scheduleSoundTask(world, instantTeleport);
@@ -178,7 +178,7 @@ public class WarpPageTeleportation {
 
   private void registerTasks(UUID playerUUID, TeleportationService service) {
     for (ScheduledFuture<Void> task : scheduledTasks) {
-      WarpBookMod.getInstance().getTaskRegistry().registerTask(task);
+      WarpBookMod.get().getTaskRegistry().registerTask(task);
     }
     service.registerTeleportTask(playerUUID, this);
   }

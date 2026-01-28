@@ -54,7 +54,7 @@ public class BindWarpPageUI extends InteractiveCustomUIPage<BindWarpPageUI.BindW
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store,
                                 @Nonnull BindWarpPageEventData data) {
         if (data.name == null) {
-            WarpPageBindingService bindingService = WarpBookMod.getInstance().getWarpPageBindingService();
+            WarpPageBindingService bindingService = WarpBookMod.get().getWarpPageBindingService();
             boolean success = bindingService.bindHeldWarpPage(ref, store, context, this.name);
             if (success) {
                 close();

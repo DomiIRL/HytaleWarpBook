@@ -10,7 +10,6 @@ import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.damage.DamageDataComponent;
-import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -39,7 +38,7 @@ public class TeleportCancelSystem extends EntityTickingSystem<EntityStore> {
     if (uuidComponent == null) return;
     UUID uuid = uuidComponent.getUuid();
 
-    TeleportationService storage = WarpBookMod.getInstance().getTeleportationService();
+    TeleportationService storage = WarpBookMod.get().getTeleportationService();
     WarpPageTeleportation teleportTask = storage.getTeleportTask(uuid);
     if (teleportTask == null) {
       return;

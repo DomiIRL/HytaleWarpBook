@@ -61,7 +61,7 @@ public class TeleportWarpPageInteraction extends SimpleInstantInteraction {
             return;
         }
 
-        WarpPageUsageService usageService = WarpBookMod.getInstance().getWarpPageUsageService();
+        WarpPageUsageService usageService = WarpBookMod.get().getWarpPageUsageService();
         boolean success = usageService.startTeleportPlayer(entityRef, entityRef.getStore(), heldItem, context.getHeldItemContainer(), context.getHeldItemSlot());
         if (success) {
             context.getState().state = InteractionState.Finished;

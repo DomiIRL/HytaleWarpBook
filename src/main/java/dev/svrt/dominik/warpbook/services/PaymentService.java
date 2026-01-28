@@ -12,7 +12,7 @@ import dev.svrt.dominik.warpbook.config.WarpBookConfig;
 public class PaymentService {
 
     public boolean processPayment(Player player) {
-        WarpBookConfig config = WarpBookMod.getInstance().getConfig().get();
+        WarpBookConfig config = WarpBookMod.get().getConfig().get();
 
         if (config.isFreeTeleport() || player.getGameMode() == GameMode.Creative) {
             return true;

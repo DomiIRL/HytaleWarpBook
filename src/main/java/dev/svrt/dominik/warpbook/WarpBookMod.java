@@ -29,7 +29,6 @@ import javax.annotation.Nonnull;
 public class WarpBookMod extends JavaPlugin {
 
     public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    public static ComponentType<ChunkStore, WarpPageTeleporter> TELEPORTER_COMPONENT_TYPE;
 
     private static WarpBookMod instance;
 
@@ -41,6 +40,8 @@ public class WarpBookMod extends JavaPlugin {
     private TeleportationService teleportationService;
     private RandomDestinationService randomDestinationService;
     private PaymentService paymentService;
+
+    private ComponentType<ChunkStore, WarpPageTeleporter> warpPageTeleporterComponentType;
 
     public WarpBookMod(@Nonnull JavaPluginInit init) {
         super(init);
@@ -60,7 +61,7 @@ public class WarpBookMod extends JavaPlugin {
         this.paymentService = new PaymentService();
 
         ComponentRegistryProxy<ChunkStore> chunkStoreRegistry = getChunkStoreRegistry();
-        TELEPORTER_COMPONENT_TYPE = chunkStoreRegistry.registerComponent(WarpPageTeleporter.class, "AWBWarpPageTeleporter", WarpPageTeleporter.CODEC);
+        warpPageTeleporterComponentType = chunkStoreRegistry.registerComponent(WarpPageTeleporter.class, "AWBWarpPageTeleporter", WarpPageTeleporter.CODEC);
 
         CodecMapRegistry.Assets<Interaction, ?> interactionRegistry = getCodecRegistry(Interaction.CODEC);
         interactionRegistry.register("AWBTeleportWarpPage", TeleportWarpPageInteraction.class, TeleportWarpPageInteraction.CODEC);
@@ -117,7 +118,11 @@ public class WarpBookMod extends JavaPlugin {
         return paymentService;
     }
 
-    public static WarpBookMod getInstance() {
+    public ComponentType<ChunkStore, WarpPageTeleporter> getWarpPageTeleporterComponentType() {
+        return warpPageTeleporterComponentType;
+    }
+
+    public static WarpBookMod get() {
         return instance;
     }
 }
