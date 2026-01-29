@@ -23,12 +23,16 @@ public class BenchCategoryAdder {
             Class<? extends CraftingBench> benchClass = bench.getClass();
             Field categoriesField = benchClass.getDeclaredField("categories");
             categoriesField.setAccessible(true);
+
             CraftingBench.BenchCategory[] newCategories = new CraftingBench.BenchCategory[categories.length + 1];
             System.arraycopy(categories, 0, newCategories, 0, categories.length);
-            newCategories[categories.length] = new CraftingBench.BenchCategory("AWB_Warp_Book", "awb.benchCategories.warpBook", "Icons/ItemsGenerated/AWB_Warp_Book.png", new CraftingBench.BenchItemCategory[0]);
+
+            CraftingBench.BenchCategory warpBookCategory = new CraftingBench.BenchCategory("AWB_Warp_Book", "awb.benchCategories.warpBook", "Icons/ItemsGenerated/AWB_Warp_Book.png", new CraftingBench.BenchItemCategory[0]);
+            newCategories[categories.length] = warpBookCategory;
+
             categoriesField.set(bench, newCategories);
         } catch (Exception e) {
-            LOGGER.atSevere().withCause(e).log("Something went wrong while adding custom bench category with WarpBook recipes.");
+            LOGGER.atSevere().withCause(e).log("Something went wrong while adding custom bench category with WarpBook recipes. Please report this to the mod author. The mod will likely not work as intended.");
         }
     }
 
