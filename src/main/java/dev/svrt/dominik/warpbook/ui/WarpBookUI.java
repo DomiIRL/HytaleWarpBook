@@ -31,7 +31,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
     private final ItemStackItemContainer container;
 
     public WarpBookUI(PlayerRef playerRef, InteractionContext context) {
-        super(playerRef, CustomPageLifetime.CanDismiss, WarpBookEventData.CODEC);
+        super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, WarpBookEventData.CODEC);
 
         ItemContainer itemContainer = context.getHeldItemContainer();
         if (itemContainer == null) {
@@ -92,13 +92,13 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
             uiIndex++;
         }
 
+        events.addEventBinding(CustomUIEventBindingType.Dismissing, "#Content");
+
     }
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store,
                                 @Nonnull WarpBookEventData data) {
-        super.handleDataEvent(ref, store, data);
-
         if (data.slot != null) {
             try {
                 short slotIndex = Short.parseShort(data.slot);
@@ -106,6 +106,8 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
             } catch (NumberFormatException e) {
                 playerRef.sendMessage(Message.raw("Invalid slot number!"));
             }
+        } else {
+            playerRef.sendMessage(Message.raw("Unknown event data received!"));
         }
     }
 
