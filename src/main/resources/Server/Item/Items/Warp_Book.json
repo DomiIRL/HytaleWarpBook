@@ -4,23 +4,24 @@
     "Description": "awb.items.Warp_Book.description"
   },
   "Icon": "Icons/ItemsGenerated/AWB_Warp_Book.png",
+  "Model": "Items/Warp_Book/AWB_Warp_Book.blockymodel",
+  "Texture": "Items/Warp_Book/AWB_Warp_Book.png",
+  "ItemLevel": 40,
   "Quality": "Epic",
   "MaxStack": 1,
-  "ItemLevel": 40,
-  "Model": "Items/Utility/Warp_Book/AWB_Warp_Book.blockymodel",
-  "Texture": "Items/Utility/Warp_Book/AWB_Warp_Book.png",
-  "IconProperties": {
-    "Scale": 0.745,
-    "Rotation": [
-      32,
-      90,
-      0
+  "Categories": [
+    "Items.Tools"
+  ],
+  "Tags": {
+    "Type": [
+      "Tool"
     ],
-    "Translation": [
-      -12,
-      -16
-    ]
+    "Family": []
   },
+  "PlayerAnimationsId": "AWB_Warp_Book",
+  "UsePlayerAnimations": true,
+  "DroppedItemAnimation": "Items/Animations/Dropped/Dropped_Diagonal_Left.blockyanim",
+  "Scale": 1.2,
   "Interactions": {
     "Primary": {
       "Interactions": [
@@ -40,19 +41,18 @@
       ]
     }
   },
-  "DroppedItemAnimation": "Items/Animations/Dropped/Dropped_Diagonal_Left.blockyanim",
-  "Scale": 1.2,
-  "PlayerAnimationsId": "AWB_Warp_Book",
-  "UsePlayerAnimations": true,
-  "Tags": {
-    "Type": [
-      "Tool"
+  "IconProperties": {
+    "Scale": 0.745,
+    "Rotation": [
+      32,
+      90,
+      0
     ],
-    "Family": []
+    "Translation": [
+      -12,
+      -16
+    ]
   },
-  "Categories": [
-    "Items.Tools"
-  ],
   "Recipe": {
     "Input": [
       {
@@ -79,7 +79,7 @@
         "Id": "Arcanebench",
         "Type": "Crafting",
         "Categories": [
-          "Arcane_Misc"
+          "AWB_Warp_Book"
         ]
       }
     ]

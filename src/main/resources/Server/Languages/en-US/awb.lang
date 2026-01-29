@@ -21,5 +21,5 @@ customUI.warpPageTeleporter.useLabel=The Teleporter will lead to the location bo
 customUI.warpPageTeleporter.consumesPage=Consumes your held Warp Page!
 customUI.warpPageTeleporter.consumesPageCost="Consumes your held Warp Page and {amount} "
 customUI.warpPageTeleporter.consumesPageCostSuffix=!
-customUI.warpPageTeleporter.bind=Bind to Warp Page
-customUI.cost=Cost:
+customUI.warpPageTeleporter.bind=Bind to "{name}"
+benchCategories.warpBook=Arcanist's Warp Book

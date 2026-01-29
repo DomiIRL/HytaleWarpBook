@@ -17,6 +17,7 @@ import dev.svrt.dominik.warpbook.config.WarpBookConfig;
 import dev.svrt.dominik.warpbook.interactions.OpenWarpBookInteraction;
 import dev.svrt.dominik.warpbook.interactions.TeleportWarpPageInteraction;
 import dev.svrt.dominik.warpbook.interactions.WarpPageTeleporterInteraction;
+import dev.svrt.dominik.warpbook.listener.BenchCategoryAdder;
 import dev.svrt.dominik.warpbook.listener.RandomWarpPagesDropListAdder;
 import dev.svrt.dominik.warpbook.services.*;
 import dev.svrt.dominik.warpbook.systems.TeleportCancelSystem;
@@ -74,6 +75,7 @@ public class WarpBookMod extends JavaPlugin {
         customPageRegistry.register("AWBWarpPageTeleporter", WarpPageTeleporterUISupplier.class, WarpPageTeleporterUISupplier.CODEC);
 
         getEventRegistry().registerGlobal(BootEvent.class, RandomWarpPagesDropListAdder::onBoot);
+        getEventRegistry().registerGlobal(BootEvent.class, BenchCategoryAdder::onBoot);
 
         LOGGER.atInfo().log("Warp Book plugin loaded!");
     }

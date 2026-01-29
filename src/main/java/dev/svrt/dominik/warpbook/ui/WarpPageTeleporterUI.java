@@ -71,6 +71,7 @@ public class WarpPageTeleporterUI extends InteractiveCustomUIPage<WarpPageTelepo
         }
 
         commands.append("Pages/AWB_WarpPageTeleporter.ui");
+        commands.set("#BindButton.Text", Message.translation("awb.customUI.warpPageTeleporter.bind").param("name", binding.name));
 
         Price bindingPrice = WarpBookMod.get().getConfig().get().getTeleporterBindingPrice();
         boolean isFree = bindingPrice == null || bindingPrice.isFree();

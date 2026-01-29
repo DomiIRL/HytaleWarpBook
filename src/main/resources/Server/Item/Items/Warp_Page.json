@@ -3,25 +3,23 @@
     "Name": "awb.items.Warp_Page.name",
     "Description": "awb.items.Warp_Page.description"
   },
+  "Icon": "Icons/ItemsGenerated/AWB_Warp_Page.png",
+  "Model": "Items/Warp_Page/AWB_Warp_Page.blockymodel",
+  "Texture": "Items/Warp_Page/AWB_Warp_Page.png",
+  "ItemLevel": 30,
   "Quality": "Rare",
   "MaxStack": 1,
-  "ItemLevel": 30,
+  "Categories": [
+    "Items.Tools"
+  ],
+  "Tags": {
+    "Type": [
+      "Tool"
+    ],
+    "Family": []
+  },
   "PlayerAnimationsId": "AWB_Warp_Page",
   "UsePlayerAnimations": true,
-  "Model": "Items/Utility/Warp_Page/AWB_Warp_Page.blockymodel",
-  "Texture": "Items/Utility/Warp_Page/AWB_Warp_Page.png",
-  "IconProperties": {
-    "Scale": 0.76,
-    "Rotation": [
-      135,
-      135,
-      0
-    ],
-    "Translation": [
-      -1,
-      5
-    ]
-  },
   "Interactions": {
     "Secondary": {
       "Interactions": [
@@ -34,16 +32,18 @@
       ]
     }
   },
-  "Icon": "Icons/ItemsGenerated/AWB_Warp_Page.png",
-  "Tags": {
-    "Type": [
-      "Tool"
+  "IconProperties": {
+    "Scale": 0.76,
+    "Rotation": [
+      135,
+      135,
+      0
     ],
-    "Family": []
+    "Translation": [
+      -1,
+      5
+    ]
   },
-  "Categories": [
-    "Items.Tools"
-  ],
   "Recipe": {
     "Input": [
       {
@@ -66,7 +66,7 @@
         "Id": "Arcanebench",
         "Type": "Crafting",
         "Categories": [
-          "Arcane_Misc"
+          "AWB_Warp_Book"
         ]
       }
     ]
