@@ -6,7 +6,8 @@
   "Quality": "Rare",
   "MaxStack": 1,
   "ItemLevel": 30,
-  "PlayerAnimationsId": "Item",
+  "PlayerAnimationsId": "AWB_Warp_Page",
+  "UsePlayerAnimations": true,
   "Model": "Items/Utility/Warp_Page/AWB_Warp_Page.blockymodel",
   "Texture": "Items/Utility/Warp_Page/AWB_Warp_Page.png",
   "IconProperties": {
@@ -33,7 +34,6 @@
       ]
     }
   },
-  "UsePlayerAnimations": false,
   "Icon": "Icons/ItemsGenerated/AWB_Warp_Page.png",
   "Tags": {
     "Type": [
