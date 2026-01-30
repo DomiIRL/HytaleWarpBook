@@ -31,21 +31,21 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
     private final ItemStackItemContainer container;
 
     public WarpBookUI(PlayerRef playerRef, InteractionContext context) {
-        super(playerRef, CustomPageLifetime.CanDismiss, WarpBookEventData.CODEC);
+        super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, WarpBookEventData.CODEC);
 
         ItemContainer itemContainer = context.getHeldItemContainer();
         if (itemContainer == null) {
             this.container = null;
             return;
         }
-        WarpBookService warpBookService = WarpBookMod.getInstance().getWarpBookService();
+        WarpBookService warpBookService = WarpBookMod.get().getWarpBookService();
         this.container = warpBookService.ensureWarpBookContainer(itemContainer, context.getHeldItemSlot());
     }
 
     @Override
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commands,
                       @Nonnull UIEventBuilder events, @Nonnull Store<EntityStore> store) {
-        commands.append("AWB_WarpBook.ui");
+        commands.append("Pages/AWB_WarpBook.ui");
 
         commands.clear("#WarpList");
 
@@ -69,7 +69,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
 
             String selector = "#WarpList[" + uiIndex + "]";
 
-            commands.append("#WarpList", "AWB_WarpPage.ui");
+            commands.append("#WarpList", "Pages/AWB_WarpPage.ui");
 
             String warpName = pageBinding.name != null ? pageBinding.name : "Ancient Destination";
             Transform transform = pageBinding.transform;
@@ -92,13 +92,13 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
             uiIndex++;
         }
 
+        events.addEventBinding(CustomUIEventBindingType.Dismissing, "#Content");
+
     }
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store,
                                 @Nonnull WarpBookEventData data) {
-        super.handleDataEvent(ref, store, data);
-
         if (data.slot != null) {
             try {
                 short slotIndex = Short.parseShort(data.slot);
@@ -106,6 +106,8 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
             } catch (NumberFormatException e) {
                 playerRef.sendMessage(Message.raw("Invalid slot number!"));
             }
+        } else {
+            playerRef.sendMessage(Message.raw("Unknown event data received!"));
         }
     }
 
@@ -118,7 +120,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
             return;
         }
 
-        WarpPageUsageService usageService = WarpBookMod.getInstance().getWarpPageUsageService();
+        WarpPageUsageService usageService = WarpBookMod.get().getWarpPageUsageService();
         boolean success = usageService.startTeleportPlayer(ref, store, warpPage, container, slot);
         if (success) {
             close();

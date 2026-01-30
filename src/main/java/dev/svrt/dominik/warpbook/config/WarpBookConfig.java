@@ -10,35 +10,27 @@ public class WarpBookConfig {
     .append(new KeyedCodec<>("Instant_Teleport", BuilderCodec.BOOLEAN),
       (c, v) -> c.instantTeleport = v, c -> c.instantTeleport)
     .add()
-    .append(new KeyedCodec<>("Free_Teleport", BuilderCodec.BOOLEAN),
-      (c, v) -> c.freeTeleport = v, c -> c.freeTeleport)
+    .append(new KeyedCodec<>("Teleport_Price", Price.CODEC),
+      (c, v) -> c.teleportPrice = v, c -> c.teleportPrice)
     .add()
-    .append(new KeyedCodec<>("Cost_Item_Id", BuilderCodec.STRING),
-      (c, v) -> c.costItemId = v, c -> c.costItemId)
-    .add()
-    .append(new KeyedCodec<>("Cost_Item_Amount", BuilderCodec.INTEGER),
-      (c, v) -> c.costItemAmount = v, c -> c.costItemAmount)
+    .append(new KeyedCodec<>("Teleporter_Binding_Price", Price.CODEC),
+      (c, v) -> c.teleporterBindingPrice = v, c -> c.teleporterBindingPrice)
     .add()
     .build();
 
   private boolean instantTeleport = false;
-  private boolean freeTeleport = false;
-  private String costItemId = "Ingredient_Void_Essence";
-  private int costItemAmount = 1;
+  private Price teleportPrice = new Price("Ingredient_Void_Essence", 1);
+  private Price teleporterBindingPrice = new Price("Ingredient_Void_Essence", 5);
 
   public boolean isInstantTeleport() {
     return instantTeleport;
   }
 
-  public boolean isFreeTeleport() {
-    return freeTeleport;
+  public Price getTeleportPrice() {
+    return teleportPrice;
   }
 
-  public String getCostItemId() {
-    return costItemId;
-  }
-
-  public int getCostItemAmount() {
-    return costItemAmount;
+  public Price getTeleporterBindingPrice() {
+    return teleporterBindingPrice;
   }
 }

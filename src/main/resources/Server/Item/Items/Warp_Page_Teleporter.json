@@ -3,26 +3,21 @@
     "Name": "awb.items.Warp_Page_Teleporter.name",
     "Description": "awb.items.Warp_Page_Teleporter.description"
   },
-  "Icon": "Icons/ItemsGenerated/Teleporter.png",
+  "Icon": "Icons/ItemsGenerated/AWB_Warp_Page_Teleporter.png",
+  "ItemLevel": 30,
+  "Quality": "Epic",
+  "MaxStack": 10,
   "Categories": [
     "Blocks.Structural"
   ],
-  "MaxStack": 10,
   "PlayerAnimationsId": "Block",
-  "Interactions": {
-    "Secondary": {
-      "Interactions": [
-        "Teleporter_Place"
-      ]
-    }
-  },
   "BlockType": {
     "Material": "Solid",
     "DrawType": "Model",
-    "CustomModel": "Blocks/Miscellaneous/Teleporter_Pad.blockymodel",
+    "CustomModel": "Blocks/Warp_Page_Portal/AWB_Warp_Page_Teleporter_Pad.blockymodel",
     "CustomModelTexture": [
       {
-        "Texture": "Blocks/Miscellaneous/Teleporter_Pad_Texture.png",
+        "Texture": "Blocks/Warp_Page_Portal/AWB_Warp_Page_Teleporter_Pad_Texture.png",
         "Weight": 1
       }
     ],
@@ -56,12 +51,18 @@
           ],
           "Interactions": {
             "CollisionEnter": {
+              "Cooldown": {
+                "Cooldown": 1
+              },
               "Interactions": [
                 {
-                  "Type": "ApplyEffect",
-                  "EffectId": "Portal_Teleport",
-                  "Effects": {
-                    "WorldSoundEventId": "SFX_Potion_Drink_Success"
+                  "Type": "AWBWarpPageTeleporter",
+                  "Next": {
+                    "Type": "ApplyEffect",
+                    "EffectId": "AWB_Warp_Page_Teleporter_Portal_Teleport",
+                    "Effects": {
+                      "WorldSoundEventId": "SFX_Potion_Drink_Success"
+                    }
                   }
                 }
               ]
@@ -71,7 +72,8 @@
                 {
                   "Type": "OpenCustomUI",
                   "Page": {
-                    "Id": "AWBWarpPageTeleporter"
+                    "Id": "AWBWarpPageTeleporter",
+                    "ActiveState": "Active"
                   }
                 }
               ]
@@ -86,7 +88,8 @@
           {
             "Type": "OpenCustomUI",
             "Page": {
-              "Id": "AWBWarpPageTeleporter"
+              "Id": "AWBWarpPageTeleporter",
+              "ActiveState": "Active"
             }
           }
         ]
@@ -96,19 +99,55 @@
     "VariantRotation": "NESW",
     "HitboxType": "Teleporter"
   },
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+        "Teleporter_Place"
+      ]
+    }
+  },
   "IconProperties": {
     "Scale": 0.25,
     "Rotation": [
       22.5,
-      45.0,
+      45,
       22.5
     ],
     "Translation": [
-      3.0,
-      -42.0
+      3,
+      -42
     ]
   },
-  "ItemLevel": 30,
-  "Quality": "Epic",
-  "ItemSoundSetId": "ISS_Blocks_Stone"
+  "ItemSoundSetId": "ISS_Blocks_Stone",
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Ingredient_Void_Essence",
+        "Quantity": 12
+      },
+      {
+        "ItemId": "Wood_Azure_Trunk",
+        "Quantity": 8
+      },
+      {
+        "ItemId": "Plant_Crop_Mana3",
+        "Quantity": 5
+      },
+      {
+        "ResourceTypeId": "Rock",
+        "Quantity": 10
+      }
+    ],
+    "OutputQuantity": 1,
+    "TimeSeconds": 5,
+    "BenchRequirement": [
+      {
+        "Id": "Arcanebench",
+        "Type": "Crafting",
+        "Categories": [
+          "AWB_Warp_Book"
+        ]
+      }
+    ]
+  }
 }

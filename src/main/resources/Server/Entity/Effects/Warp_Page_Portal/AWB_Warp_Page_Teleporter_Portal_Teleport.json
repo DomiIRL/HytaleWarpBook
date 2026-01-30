@@ -1,0 +1,12 @@
+{
+  "ApplicationEffects": {
+    "ModelVFXId": "AWB_Warp_Page_Teleporter_Portal_Teleport",
+    "Particles": [
+      {
+        "SystemId": "AWB_Portal_Going_Through_Purple"
+      }
+    ]
+  },
+  "Duration": 0.5,
+  "OverlapBehavior": "Extend"
+}

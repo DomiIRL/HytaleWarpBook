@@ -14,14 +14,12 @@ import com.hypixel.hytale.server.core.entity.entities.player.windows.ItemStackCo
 import com.hypixel.hytale.server.core.entity.entities.player.windows.Window;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.ItemStackItemContainer;
-import com.hypixel.hytale.server.core.inventory.container.filter.FilterActionType;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.svrt.dominik.warpbook.WarpBookMod;
-import dev.svrt.dominik.warpbook.data.WarpPageBinding;
 import dev.svrt.dominik.warpbook.services.WarpBookService;
 
 import javax.annotation.Nonnull;
@@ -73,7 +71,7 @@ public class OpenWarpBookInteraction extends SimpleInstantInteraction {
                 return;
             }
 
-            WarpBookService warpBookService = WarpBookMod.getInstance().getWarpBookService();
+            WarpBookService warpBookService = WarpBookMod.get().getWarpBookService();
             ItemStackItemContainer container = warpBookService.ensureWarpBookContainer(hotbarContainer, heldItemSlot);
             if (container == null) {
                 return;

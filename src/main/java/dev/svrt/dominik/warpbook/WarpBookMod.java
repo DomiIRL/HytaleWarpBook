@@ -17,6 +17,7 @@ import dev.svrt.dominik.warpbook.config.WarpBookConfig;
 import dev.svrt.dominik.warpbook.interactions.OpenWarpBookInteraction;
 import dev.svrt.dominik.warpbook.interactions.TeleportWarpPageInteraction;
 import dev.svrt.dominik.warpbook.interactions.WarpPageTeleporterInteraction;
+import dev.svrt.dominik.warpbook.listener.BenchCategoryAdder;
 import dev.svrt.dominik.warpbook.listener.RandomWarpPagesDropListAdder;
 import dev.svrt.dominik.warpbook.services.*;
 import dev.svrt.dominik.warpbook.systems.TeleportCancelSystem;
@@ -29,7 +30,6 @@ import javax.annotation.Nonnull;
 public class WarpBookMod extends JavaPlugin {
 
     public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    public static ComponentType<ChunkStore, WarpPageTeleporter> TELEPORTER_COMPONENT_TYPE;
 
     private static WarpBookMod instance;
 
@@ -41,6 +41,8 @@ public class WarpBookMod extends JavaPlugin {
     private TeleportationService teleportationService;
     private RandomDestinationService randomDestinationService;
     private PaymentService paymentService;
+
+    private ComponentType<ChunkStore, WarpPageTeleporter> warpPageTeleporterComponentType;
 
     public WarpBookMod(@Nonnull JavaPluginInit init) {
         super(init);
@@ -60,7 +62,7 @@ public class WarpBookMod extends JavaPlugin {
         this.paymentService = new PaymentService();
 
         ComponentRegistryProxy<ChunkStore> chunkStoreRegistry = getChunkStoreRegistry();
-        TELEPORTER_COMPONENT_TYPE = chunkStoreRegistry.registerComponent(WarpPageTeleporter.class, "AWBWarpPageTeleporter", WarpPageTeleporter.CODEC);
+        warpPageTeleporterComponentType = chunkStoreRegistry.registerComponent(WarpPageTeleporter.class, "AWBWarpPageTeleporter", WarpPageTeleporter.CODEC);
 
         CodecMapRegistry.Assets<Interaction, ?> interactionRegistry = getCodecRegistry(Interaction.CODEC);
         interactionRegistry.register("AWBTeleportWarpPage", TeleportWarpPageInteraction.class, TeleportWarpPageInteraction.CODEC);
@@ -73,6 +75,7 @@ public class WarpBookMod extends JavaPlugin {
         customPageRegistry.register("AWBWarpPageTeleporter", WarpPageTeleporterUISupplier.class, WarpPageTeleporterUISupplier.CODEC);
 
         getEventRegistry().registerGlobal(BootEvent.class, RandomWarpPagesDropListAdder::onBoot);
+        getEventRegistry().registerGlobal(BootEvent.class, BenchCategoryAdder::onBoot);
 
         LOGGER.atInfo().log("Warp Book plugin loaded!");
     }
@@ -117,7 +120,11 @@ public class WarpBookMod extends JavaPlugin {
         return paymentService;
     }
 
-    public static WarpBookMod getInstance() {
+    public ComponentType<ChunkStore, WarpPageTeleporter> getWarpPageTeleporterComponentType() {
+        return warpPageTeleporterComponentType;
+    }
+
+    public static WarpBookMod get() {
         return instance;
     }
 }

@@ -3,12 +3,37 @@
     "Name": "awb.items.Warp_Page.name",
     "Description": "awb.items.Warp_Page.description"
   },
+  "Icon": "Icons/ItemsGenerated/AWB_Warp_Page.png",
+  "Model": "Items/Warp_Page/AWB_Warp_Page.blockymodel",
+  "Texture": "Items/Warp_Page/AWB_Warp_Page.png",
+  "ItemLevel": 30,
   "Quality": "Rare",
   "MaxStack": 1,
-  "ItemLevel": 30,
-  "PlayerAnimationsId": "Item",
-  "Model": "Items/Utility/Warp_Page/AWB_Warp_Page.blockymodel",
-  "Texture": "Items/Utility/Warp_Page/AWB_Warp_Page.png",
+  "Categories": [
+    "Items.Tools"
+  ],
+  "Tags": {
+    "Type": [
+      "Tool"
+    ],
+    "Family": []
+  },
+  "PlayerAnimationsId": "AWB_Warp_Page",
+  "UsePlayerAnimations": true,
+  "Interactions": {
+    "Primary": "AWB_Empty",
+    "Secondary": {
+      "RequireNewClick": true,
+      "Interactions": [
+        {
+          "Type": "OpenCustomUI",
+          "Page": {
+            "Id": "AWBBindWarpPage"
+          }
+        }
+      ]
+    }
+  },
   "IconProperties": {
     "Scale": 0.76,
     "Rotation": [
@@ -21,29 +46,6 @@
       5
     ]
   },
-  "Interactions": {
-    "Secondary": {
-      "Interactions": [
-        {
-          "Type": "OpenCustomUI",
-          "Page": {
-            "Id": "AWBBindWarpPage"
-          }
-        }
-      ]
-    }
-  },
-  "UsePlayerAnimations": false,
-  "Icon": "Icons/ItemsGenerated/AWB_Warp_Page.png",
-  "Tags": {
-    "Type": [
-      "Tool"
-    ],
-    "Family": []
-  },
-  "Categories": [
-    "Items.Tools"
-  ],
   "Recipe": {
     "Input": [
       {
@@ -66,7 +68,7 @@
         "Id": "Arcanebench",
         "Type": "Crafting",
         "Categories": [
-          "Arcane_Misc"
+          "AWB_Warp_Book"
         ]
       }
     ]

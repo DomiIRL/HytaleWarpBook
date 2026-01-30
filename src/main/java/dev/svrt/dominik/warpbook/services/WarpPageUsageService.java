@@ -13,7 +13,6 @@ import dev.svrt.dominik.warpbook.data.WarpPageBinding;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 import static dev.svrt.dominik.warpbook.WarpBookMod.LOGGER;
@@ -39,7 +38,7 @@ public class WarpPageUsageService {
     }
 
     UUID playerUUID = uuidComponent.getUuid();
-    RandomDestinationService randomDestinationService = WarpBookMod.getInstance().getRandomDestinationService();
+    RandomDestinationService randomDestinationService = WarpBookMod.get().getRandomDestinationService();
     if (randomDestinationService.hasActiveProcess(playerUUID)) {
       player.sendMessage(Message.raw("A random destination is already being calculated!"));
       return false;
@@ -65,8 +64,8 @@ public class WarpPageUsageService {
       return false;
     }
 
-    TeleportationService teleportationService = WarpBookMod.getInstance().getTeleportationService();
-    PaymentService paymentService = WarpBookMod.getInstance().getPaymentService();
+    TeleportationService teleportationService = WarpBookMod.get().getTeleportationService();
+    PaymentService paymentService = WarpBookMod.get().getPaymentService();
 
     if (!teleportationService.validateTeleportationRequest(player, binding)) {
       return false;
