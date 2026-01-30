@@ -31,6 +31,8 @@ public class BenchCategoryAdder {
             newCategories[categories.length] = warpBookCategory;
 
             categoriesField.set(bench, newCategories);
+
+            LOGGER.atInfo().log("Successfully added custom bench category with WarpBook recipes.");
         } catch (Exception e) {
             LOGGER.atSevere().withCause(e).log("Something went wrong while adding custom bench category with WarpBook recipes. Please report this to the mod author. The mod will likely not work as intended.");
         }
