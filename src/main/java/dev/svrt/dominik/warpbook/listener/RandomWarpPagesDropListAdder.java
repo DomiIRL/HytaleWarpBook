@@ -76,9 +76,10 @@ public class RandomWarpPagesDropListAdder {
         containersField.setAccessible(true);
 
         ItemDropContainer[] existingContainers = (ItemDropContainer[]) containersField.get(multiContainer);
-        List<ItemDropContainer> containersList = new ArrayList<>(List.of(existingContainers));
-        containersList.add(newItem);
+        ItemDropContainer[] newContainers = new ItemDropContainer[existingContainers.length + 1];
+        System.arraycopy(existingContainers, 0, newContainers, 0, existingContainers.length);
+        newContainers[existingContainers.length] = newItem;
 
-        containersField.set(multiContainer, containersList.toArray(new ItemDropContainer[0]));
+        containersField.set(multiContainer, newContainers);
     }
 }
