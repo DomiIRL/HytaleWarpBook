@@ -24,6 +24,7 @@
   "Scale": 1.2,
   "Interactions": {
     "Primary": {
+      "RequireNewClick": true,
       "Interactions": [
         {
           "Type": "AWBOpenWarpBook"
@@ -31,6 +32,7 @@
       ]
     },
     "Secondary": {
+      "RequireNewClick": true,
       "Interactions": [
         {
           "Type": "OpenCustomUI",

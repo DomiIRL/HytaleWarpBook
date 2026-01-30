@@ -21,7 +21,9 @@
   "PlayerAnimationsId": "AWB_Warp_Page",
   "UsePlayerAnimations": true,
   "Interactions": {
+    "Primary": "AWB_Empty",
     "Secondary": {
+      "RequireNewClick": true,
       "Interactions": [
         {
           "Type": "OpenCustomUI",
