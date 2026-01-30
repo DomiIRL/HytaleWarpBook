@@ -1,13 +1,17 @@
 package dev.svrt.dominik.warpbook.listener;
 
+import com.hypixel.hytale.codec.Codec;
+import com.hypixel.hytale.codec.ExtraInfo;
+import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemDrop;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemDropList;
 import com.hypixel.hytale.server.core.asset.type.item.config.container.ItemDropContainer;
 import com.hypixel.hytale.server.core.asset.type.item.config.container.MultipleItemDropContainer;
 import com.hypixel.hytale.server.core.asset.type.item.config.container.SingleItemDropContainer;
 import com.hypixel.hytale.server.core.event.events.BootEvent;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
 import dev.svrt.dominik.warpbook.data.WarpPageBinding;
+import org.bson.BsonDocument;
+import org.bson.BsonValue;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -20,6 +24,7 @@ public class RandomWarpPagesDropListAdder {
 
     private static final String ITEM_ID = "Warp_Page_Bound";
     private static final String TARGET_LIST_PREFIX = "Zone";
+    private static final int WEIGHT = 5;
 
     public static void onBoot(BootEvent ignored) {
         Map<String, ItemDropList> map = ItemDropList.getAssetMap().getAssetMap();
@@ -35,13 +40,20 @@ public class RandomWarpPagesDropListAdder {
     }
 
     private static ItemDropContainer createWarpPageContainer() {
+        BsonDocument itemDropMetaData = new BsonDocument();
+
         WarpPageBinding binding = new WarpPageBinding();
         binding.random = true;
 
-        ItemStack boundWarpPage = new ItemStack(ITEM_ID, 1).withMetadata(WarpPageBinding.KEYED_CODEC, binding);
-        ItemDrop warpPageBound = new ItemDrop(ITEM_ID, boundWarpPage.getMetadata(), 1, 1);
+        KeyedCodec<WarpPageBinding> bindingKeyedCodec = WarpPageBinding.KEYED_CODEC;
+        String bindingKey = bindingKeyedCodec.getKey();
+        Codec<WarpPageBinding> bindingCodec = bindingKeyedCodec.getChildCodec();
 
-        return new SingleItemDropContainer(warpPageBound, 5);
+        BsonValue bindingBsonValue = bindingCodec.encode(binding, new ExtraInfo());
+        itemDropMetaData.put(bindingKey, bindingBsonValue);
+
+        ItemDrop randomWarpPageItemDrop = new ItemDrop(ITEM_ID, itemDropMetaData, 1, 1);
+        return new SingleItemDropContainer(randomWarpPageItemDrop, WEIGHT);
     }
 
     private static void injectWarpPage(ItemDropList dropList, ItemDropContainer warpPageContainer) {
