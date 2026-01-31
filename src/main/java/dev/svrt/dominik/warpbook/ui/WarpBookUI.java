@@ -25,10 +25,14 @@ import dev.svrt.dominik.warpbook.services.WarpBookService;
 import dev.svrt.dominik.warpbook.services.WarpPageUsageService;
 
 import javax.annotation.Nonnull;
+import java.util.LinkedList;
+import java.util.List;
 
 public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEventData> {
 
     private final ItemStackItemContainer container;
+
+    private String searchQuery = "";
 
     public WarpBookUI(PlayerRef playerRef, InteractionContext context) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, WarpBookEventData.CODEC);
@@ -46,7 +50,12 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commands,
                       @Nonnull UIEventBuilder events, @Nonnull Store<EntityStore> store) {
         commands.append("Pages/AWB_WarpBook.ui");
+        events.addEventBinding(CustomUIEventBindingType.ValueChanged, "#SearchInput", EventData.of("@SearchQuery", "#SearchInput.Value"));
+        buildWarpBookList(commands, events);
+    }
 
+    private void buildWarpBookList(@Nonnull UICommandBuilder commands,
+                                   @Nonnull UIEventBuilder events) {
         commands.clear("#WarpList");
 
         if (container == null) {
@@ -54,28 +63,22 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
             return;
         }
 
-        int uiIndex = 0;
-        for (short i = 0; i < container.getCapacity(); i++) {
-            ItemStack warpPage = container.getItemStack(i);
+        List<WarpBookEntry> entries = getFilteredWarpBookEntries();
 
-            if (warpPage == null || warpPage.isEmpty()) {
-                continue;
-            }
+        for (WarpBookEntry entry : entries) {
+            WarpPageBinding binding = entry.binding;
+            short index = entry.index;
+            short slot = entry.slot;
 
-            WarpPageBinding pageBinding = warpPage.getFromMetadataOrNull(WarpPageBinding.KEYED_CODEC);
-            if (pageBinding == null) {
-                continue;
-            }
-
-            String selector = "#WarpList[" + uiIndex + "]";
+            String selector = "#WarpList[" + index + "]";
 
             commands.append("#WarpList", "Pages/AWB_WarpPage.ui");
 
-            String warpName = pageBinding.name != null ? pageBinding.name : "Ancient Destination";
-            Transform transform = pageBinding.transform;
+            String warpName = binding.name != null ? binding.name : "Ancient Destination";
+            Transform transform = binding.transform;
 
             String position = "Unknown";
-            if (!pageBinding.random) {
+            if (!binding.random) {
                 position = String.format("X: %.1f, Y: %.1f, Z: %.1f",
                   transform.getPosition().x, transform.getPosition().y, transform.getPosition().z);
             }
@@ -86,14 +89,55 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
             events.addEventBinding(
               CustomUIEventBindingType.Activating,
               selector + " #TeleportButton",
-              EventData.of("Slot", Integer.toString(i)),
+              EventData.of("Slot", Integer.toString(slot)),
               false
             );
-            uiIndex++;
+        }
+    }
+
+    private List<WarpBookEntry> getFilteredWarpBookEntries() {
+        List<WarpBookEntry> allEntries = getAllWarpBookEntries();
+
+        if (searchQuery.isEmpty()) {
+            return allEntries;
         }
 
-        events.addEventBinding(CustomUIEventBindingType.Dismissing, "#Content");
+        List<WarpBookEntry> filteredEntries = new LinkedList<>();
+        for (WarpBookEntry entry : allEntries) {
+            WarpPageBinding binding = entry.binding;
+            String query = searchQuery.toLowerCase().replaceAll("\\s+", "");
+            String name = binding.name != null ? binding.name.toLowerCase().replaceAll("\\s+", "") : "";
+            if (name.contains(query)) {
+                filteredEntries.add(entry);
+            }
+        }
 
+        return filteredEntries;
+    }
+
+    private List<WarpBookEntry> getAllWarpBookEntries() {
+        List<WarpBookEntry> entries = new LinkedList<>();
+
+        short index = 0;
+        for (short slot = 0; slot < container.getCapacity(); slot++) {
+            ItemStack warpPage = container.getItemStack(slot);
+
+            if (warpPage == null || warpPage.isEmpty()) {
+                continue;
+            }
+
+            WarpPageBinding pageBinding = warpPage.getFromMetadataOrNull(WarpPageBinding.KEYED_CODEC);
+            if (pageBinding != null) {
+                WarpBookEntry warpBookEntry = new WarpBookEntry();
+                warpBookEntry.binding = pageBinding;
+                warpBookEntry.slot = slot;
+                warpBookEntry.index = index;
+                entries.add(warpBookEntry);
+                index++;
+            }
+        }
+
+        return entries;
     }
 
     @Override
@@ -106,8 +150,12 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
             } catch (NumberFormatException e) {
                 playerRef.sendMessage(Message.raw("Invalid slot number!"));
             }
-        } else {
-            playerRef.sendMessage(Message.raw("Unknown event data received!"));
+        } else if (data.searchQuery != null) {
+            this.searchQuery = data.searchQuery;
+            UICommandBuilder commandBuilder = new UICommandBuilder();
+            UIEventBuilder eventBuilder = new UIEventBuilder();
+            this.buildWarpBookList(commandBuilder, eventBuilder);
+            this.sendUpdate(commandBuilder, eventBuilder, false);
         }
     }
 
@@ -129,14 +177,24 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
         }
     }
 
+    public static class WarpBookEntry {
+        public short slot;
+        public short index;
+        public WarpPageBinding binding;
+    }
+
     public static class WarpBookEventData {
         public static final BuilderCodec<WarpBookEventData> CODEC =
-            BuilderCodec.builder(WarpBookEventData.class, WarpBookEventData::new)
-                .append(new KeyedCodec<>("Slot", Codec.STRING),
-                    (d, v) -> d.slot = v, d -> d.slot)
-                .add()
-                .build();
+          BuilderCodec.builder(WarpBookEventData.class, WarpBookEventData::new)
+            .append(new KeyedCodec<>("Slot", Codec.STRING),
+              (d, v) -> d.slot = v, d -> d.slot)
+            .add()
+            .append(new KeyedCodec<>("@SearchQuery", Codec.STRING),
+              (d, v) -> d.searchQuery = v, d -> d.searchQuery)
+            .add()
+            .build();
 
         public String slot;
+        public String searchQuery;
     }
 }
