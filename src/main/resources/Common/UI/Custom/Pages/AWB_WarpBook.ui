@@ -11,7 +11,7 @@ $C.@DecoratedContainer {
         @Text = %awb.customUI.warpBook.title;
       }
 
-//      $C.@HeaderSearch {}
+      $C.@HeaderSearch {}
     }
   }
 
