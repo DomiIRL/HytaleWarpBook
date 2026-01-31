@@ -1,27 +1,13 @@
 {
+  "Parent": "Template_Warp_Page_Position",
   "TranslationProperties": {
     "Name": "awb.items.Warp_Page_Bound.name",
     "Description": "awb.items.Warp_Page_Bound.description"
   },
   "Icon": "Icons/ItemsGenerated/AWB_Warp_Page_Bound.png",
-  "Model": "Items/Warp_Page/AWB_Warp_Page.blockymodel",
   "Texture": "Items/Warp_Page/AWB_Warp_Page_Bound.png",
-  "ItemLevel": 30,
-  "Quality": "Rare",
-  "MaxStack": 1,
-  "Categories": [
-    "Items.Tools"
-  ],
-  "Tags": {
-    "Type": [
-      "Tool"
-    ],
-    "Family": []
-  },
-  "PlayerAnimationsId": "AWB_Warp_Page",
-  "UsePlayerAnimations": true,
+  "Quality": "Epic",
   "Interactions": {
-    "Primary": "AWB_Empty",
     "Secondary": {
       "RequireNewClick": true,
       "Interactions": [
@@ -30,17 +16,5 @@
         }
       ]
     }
-  },
-  "IconProperties": {
-    "Scale": 0.76,
-    "Rotation": [
-      135,
-      135,
-      0
-    ],
-    "Translation": [
-      -1,
-      5
-    ]
   }
 }

@@ -1,0 +1,31 @@
+{
+  "Model": "Items/Warp_Page/AWB_Warp_Page.blockymodel",
+  "ItemLevel": 30,
+  "Quality": "Template",
+  "Categories": [
+    "Items.Tools"
+  ],
+  "Tags": {
+    "Type": [
+      "Tool"
+    ],
+    "Family": []
+  },
+  "PlayerAnimationsId": "AWB_Warp_Page",
+  "UsePlayerAnimations": true,
+  "Interactions": {
+    "Primary": "AWB_Empty"
+  },
+  "IconProperties": {
+    "Scale": 0.76,
+    "Rotation": [
+      135,
+      135,
+      0
+    ],
+    "Translation": [
+      -1,
+      5
+    ]
+  }
+}

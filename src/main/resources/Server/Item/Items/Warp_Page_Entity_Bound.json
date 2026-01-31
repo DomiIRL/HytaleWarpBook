@@ -1,12 +1,12 @@
 {
-  "Parent": "Template_Warp_Page_Position",
+  "Parent": "Template_Warp_Page_Entity",
   "TranslationProperties": {
-    "Name": "awb.items.Warp_Page.name",
-    "Description": "awb.items.Warp_Page.description"
+    "Name": "awb.items.Warp_Page_Entity_Bound.name",
+    "Description": "awb.items.Warp_Page_Entity_Bound.description"
   },
-  "Icon": "Icons/ItemsGenerated/AWB_Warp_Page.png",
-  "Texture": "Items/Warp_Page/AWB_Warp_Page.png",
-  "Quality": "Epic",
+  "Icon": "Icons/ItemsGenerated/AWB_Warp_Page_Bound.png",
+  "Texture": "Items/Warp_Page/AWB_Warp_Page_Bound.png",
+  "Quality": "Rare",
   "Interactions": {
     "Secondary": {
       "RequireNewClick": true,
