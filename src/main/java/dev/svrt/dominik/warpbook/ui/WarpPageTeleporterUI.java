@@ -16,8 +16,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.svrt.dominik.warpbook.WarpBookMod;
-import dev.svrt.dominik.warpbook.config.Price;
-import dev.svrt.dominik.warpbook.config.WarpBookConfig;
+import dev.svrt.dominik.warpbook.config.TeleportationPrice;
 import dev.svrt.dominik.warpbook.data.WarpPageBinding;
 
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -29,8 +28,6 @@ import com.hypixel.hytale.server.core.modules.block.BlockModule.BlockStateInfo;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import dev.svrt.dominik.warpbook.components.WarpPageTeleporter;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
-
-import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -73,7 +70,7 @@ public class WarpPageTeleporterUI extends InteractiveCustomUIPage<WarpPageTelepo
         commands.append("Pages/AWB_WarpPageTeleporter.ui");
         commands.set("#BindButton.Text", Message.translation("awb.customUI.warpPageTeleporter.bind").param("name", binding.name));
 
-        Price bindingPrice = WarpBookMod.get().getConfig().get().getTeleporterBindingPrice();
+        TeleportationPrice bindingPrice = WarpBookMod.get().getConfig().get().getTeleporterBindingPrice();
         boolean isFree = bindingPrice == null || bindingPrice.isFree();
         String costTranslationLabel = isFree ? "consumesPage" : "consumesPageCost";
         Message costMessage = Message.translation("awb.customUI.warpPageTeleporter." + costTranslationLabel);

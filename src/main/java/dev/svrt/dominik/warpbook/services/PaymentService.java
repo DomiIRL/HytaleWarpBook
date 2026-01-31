@@ -7,7 +7,7 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import dev.svrt.dominik.warpbook.WarpBookMod;
-import dev.svrt.dominik.warpbook.config.Price;
+import dev.svrt.dominik.warpbook.config.TeleportationPrice;
 import dev.svrt.dominik.warpbook.config.WarpBookConfig;
 
 public class PaymentService {
@@ -22,7 +22,7 @@ public class PaymentService {
         return processPayment(player, config.getTeleporterBindingPrice());
     }
 
-    private boolean processPayment(Player player, Price price) {
+    private boolean processPayment(Player player, TeleportationPrice price) {
         if (price == null || price.isFree() || player.getGameMode() == GameMode.Creative) {
             return true;
         }

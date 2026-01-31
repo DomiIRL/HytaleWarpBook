@@ -6,9 +6,9 @@ import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 
 import javax.annotation.Nullable;
 
-public class Price {
+public class TeleportationPrice {
 
-    public static final BuilderCodec<Price> CODEC = BuilderCodec.builder(Price.class, Price::new)
+    public static final BuilderCodec<TeleportationPrice> CODEC = BuilderCodec.builder(TeleportationPrice.class, TeleportationPrice::new)
             .append(new KeyedCodec<>("ItemId", BuilderCodec.STRING),
                     (p, v) -> p.itemId = v, p -> p.itemId)
             .add()
@@ -20,9 +20,9 @@ public class Price {
     private String itemId;
     private int amount;
 
-    public Price() {}
+    public TeleportationPrice() {}
 
-    public Price(String itemId, int amount) {
+    public TeleportationPrice(String itemId, int amount) {
         this.itemId = itemId;
         this.amount = amount;
     }
