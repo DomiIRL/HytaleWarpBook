@@ -1,50 +1,20 @@
 {
-  "Parent": "Template_Warp_Page_Entity",
+  "Parent": "Template_Warp_Page",
   "TranslationProperties": {
     "Name": "awb.items.Warp_Page_Entity_Bound.name",
     "Description": "awb.items.Warp_Page_Entity_Bound.description"
   },
   "Icon": "Icons/ItemsGenerated/AWB_Warp_Page_Bound.png",
   "Texture": "Items/Warp_Page/AWB_Warp_Page_Bound.png",
-  "Quality": "Rare",
+  "Quality": "Epic",
   "Interactions": {
     "Secondary": {
       "RequireNewClick": true,
       "Interactions": [
         {
-          "Type": "OpenCustomUI",
-          "Page": {
-            "Id": "AWBBindWarpPage"
-          }
+          "Type": "AWBTeleportWarpPage"
         }
       ]
     }
-  },
-  "Recipe": {
-    "Input": [
-      {
-        "ItemId": "Ingredient_Void_Essence",
-        "Quantity": 5
-      },
-      {
-        "ItemId": "Plant_Crop_Mana3",
-        "Quantity": 2
-      },
-      {
-        "ItemId": "Ingredient_Fabric_Scrap_Shadoweave",
-        "Quantity": 1
-      }
-    ],
-    "OutputQuantity": 1,
-    "TimeSeconds": 3,
-    "BenchRequirement": [
-      {
-        "Id": "Arcanebench",
-        "Type": "Crafting",
-        "Categories": [
-          "AWB_Warp_Book"
-        ]
-      }
-    ]
   }
 }

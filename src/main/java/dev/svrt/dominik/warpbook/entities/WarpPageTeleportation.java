@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -24,10 +25,7 @@ import dev.svrt.dominik.warpbook.WarpBookMod;
 import dev.svrt.dominik.warpbook.data.WarpPageBinding;
 import dev.svrt.dominik.warpbook.services.TeleportationService;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -94,16 +92,22 @@ public class WarpPageTeleportation {
 
     boolean instantTeleport = WarpBookMod.get().getConfig().get().isInstantTeleport();
 
-    scheduleTeleportTask(world, playerUUID, teleportationService, instantTeleport);
+    scheduleTeleportTask(playerUUID, teleportationService, instantTeleport);
     scheduleSoundTask(world, instantTeleport);
     registerTasks(playerUUID, teleportationService);
     playStartEffects(instantTeleport);
   }
 
-  private void scheduleTeleportTask(World world, UUID playerUUID, TeleportationService service, boolean instant) {
+  private void scheduleTeleportTask(UUID playerUUID, TeleportationService service, boolean instant) {
     scheduledTasks.add(HytaleServer.SCHEDULED_EXECUTOR.schedule(
       () -> {
-        world.execute(() -> executeTeleport(world, playerUUID, service));
+        World destinationWorld = findDestinationWorld();
+        if (destinationWorld == null) {
+          LOGGER.at(Level.WARNING).log("Failed to find destination world for teleportation!");
+          service.removeTeleportTask(playerUUID);
+          return null;
+        }
+        destinationWorld.execute(() -> executeTeleport(playerUUID, service));
         return null;
       },
       instant ? 0 : 2,
@@ -111,19 +115,47 @@ public class WarpPageTeleportation {
     ));
   }
 
-  private void executeTeleport(World world, UUID playerUUID, TeleportationService service) {
+  private void executeTeleport(UUID playerUUID, TeleportationService service) {
     if (!validateTeleportExecution(service, playerUUID)) return;
 
-    Transform transform = binding.transform;
-    entityStore.addComponent(
+    Transform destination = null;
+    World destinationWorld = findDestinationWorld();
+    if (binding.transform != null && binding.world != null) {
+      destination = binding.transform;
+    } else if (binding.targetEntityUUID != null) {
+      for (World aWorld : Universe.get().getWorlds().values()) {
+        Ref<EntityStore> aRef = aWorld.getEntityRef(binding.targetEntityUUID);
+        if (aRef != null) {
+          destinationWorld = aWorld;
+          TransformComponent targetTransform = entityStore.getComponent(aRef, TransformComponent.getComponentType());
+          if (targetTransform == null) {
+            LOGGER.at(Level.WARNING).log("Failed to get target entity transform for teleportation!");
+            service.removeTeleportTask(playerUUID);
+            return;
+          }
+          destination = targetTransform.getTransform();
+          break;
+        }
+      }
+    } else {
+      LOGGER.at(Level.WARNING).log("Invalid teleportation binding data!");
+      service.removeTeleportTask(playerUUID);
+      return;
+    }
+    if (destinationWorld == null) {
+      LOGGER.at(Level.WARNING).log("Failed to find destination world for teleportation!");
+      service.removeTeleportTask(playerUUID);
+      return;
+    }
+    destinationWorld.getEntityStore().getStore().addComponent(
       entityRef,
       Teleport.getComponentType(),
-      Teleport.createForPlayer(world, transform)
+      Teleport.createForPlayer(destinationWorld, destination)
     );
 
-    double distance = calculateDistance(startPosition, transform.getPosition());
+    double distance = calculateDistance(startPosition, destination.getPosition());
     if (distance >= PARTICLE_DISTANCE_THRESHOLD) {
-      spawnDestinationParticle(transform.getPosition());
+      spawnDestinationParticle(destination.getPosition());
     }
 
     service.removeTeleportTask(playerUUID);
@@ -191,7 +223,10 @@ public class WarpPageTeleportation {
 
     if (!instant) {
       ParticleUtil.spawnParticleEffect(PARTICLE_ENTRY, from.clone(), entityStore);
-      ParticleUtil.spawnParticleEffect(PARTICLE_ENTRY, to.clone(), entityStore);
+      World destinationWorld = findDestinationWorld();
+      if (destinationWorld != null) {
+        ParticleUtil.spawnParticleEffect(PARTICLE_ENTRY, to.clone(), destinationWorld.getEntityStore().getStore());
+      }
     }
 
     SoundUtil.playSoundEvent3d(
@@ -217,6 +252,19 @@ public class WarpPageTeleportation {
   private double calculateDistance(Vector3d from, Vector3d to) {
     if (from == null || to == null) return Double.MAX_VALUE;
     return Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2) + Math.pow(from.z - to.z, 2));
+  }
+
+  private World findDestinationWorld() {
+    if (binding.world != null) {
+      return Universe.get().getWorlds().get(binding.world);
+    } else if (binding.targetEntityUUID != null) {
+      for (World world : Universe.get().getWorlds().values()) {
+        if (world.getEntityRef(binding.targetEntityUUID) != null) {
+          return world;
+        }
+      }
+    }
+    return null;
   }
 
   public void cancel() {

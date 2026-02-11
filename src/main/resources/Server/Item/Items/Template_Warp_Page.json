@@ -1,5 +1,6 @@
 {
   "Model": "Items/Warp_Page/AWB_Warp_Page.blockymodel",
+  "MaxStack": 1,
   "ItemLevel": 30,
   "Quality": "Template",
   "Categories": [

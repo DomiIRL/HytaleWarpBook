@@ -1,5 +1,5 @@
 {
-  "Parent": "Template_Warp_Page_Position",
+  "Parent": "Template_Warp_Page",
   "TranslationProperties": {
     "Name": "awb.items.Warp_Page_Bound.name",
     "Description": "awb.items.Warp_Page_Bound.description"

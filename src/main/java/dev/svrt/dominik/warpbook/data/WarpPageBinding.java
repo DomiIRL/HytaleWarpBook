@@ -5,6 +5,8 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.math.vector.Transform;
 
+import java.util.UUID;
+
 public class WarpPageBinding {
 
   public static final BuilderCodec<WarpPageBinding> CODEC = BuilderCodec.builder(WarpPageBinding.class, WarpPageBinding::new)
@@ -20,12 +22,16 @@ public class WarpPageBinding {
     .append(new KeyedCodec<>("Random", Codec.BOOLEAN),
       (c, v) -> c.random = v, c -> c.random)
     .add()
+    .append(new KeyedCodec<>("Target_Entity_UUID", Codec.UUID_STRING),
+      (c, v) -> c.targetEntityUUID = v, c -> c.targetEntityUUID)
+    .add()
     .build();
   public static final KeyedCodec<WarpPageBinding> KEYED_CODEC = new KeyedCodec<>("Warp_Page_Binding", CODEC);
 
   public String name;
   public Transform transform;
   public String world;
+  public UUID targetEntityUUID;
   public boolean random = false;
 
   @Override
@@ -35,16 +41,7 @@ public class WarpPageBinding {
     binding.transform = this.transform != null ? this.transform.clone() : null;
     binding.world = this.world;
     binding.random = this.random;
+    binding.targetEntityUUID = this.targetEntityUUID;
     return binding;
-  }
-
-  @Override
-  public String toString() {
-    return "WarpPageBinding{" +
-      "name='" + name + '\'' +
-      ", transform=" + transform +
-      ", world='" + world + '\'' +
-      ", random=" + random +
-      '}';
   }
 }

@@ -83,7 +83,7 @@ public class TeleportationService {
             LOGGER.at(Level.WARNING).log("Failed to get current world!");
             return false;
         }
-        if (!currentWorld.getName().equals(binding.world)) { // Simplification: Accessing field directly if public
+        if (binding.targetEntityUUID == null && !currentWorld.getName().equals(binding.world)) {
              player.sendMessage(Message.raw(String.format(
                 "You are not in the correct world! (%s)", binding.world
             )));

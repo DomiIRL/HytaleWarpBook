@@ -162,7 +162,7 @@ public class WarpBookUI extends InteractiveCustomUIPage<WarpBookUI.WarpBookEvent
     private void teleportToWarp(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, short slot) {
         ItemStack warpPage = container.getItemStack(slot);
 
-        if (warpPage == null || warpPage.isEmpty() || !warpPage.getItemId().equals("Warp_Page_Bound")) {
+        if (warpPage == null || warpPage.isEmpty()) {
             playerRef.sendMessage(Message.raw("Invalid warp page itemstack!"));
             sendUpdate();
             return;
